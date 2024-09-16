@@ -30,7 +30,7 @@ data/wyscout
         ├── tags2name.csv
         └── teams.json
 ```
-//https://github.com/koenvo/wyscout-soccer-match-event-dataset 에서 데이터를 받아오실 수 있습니다.
+[여기](https://github.com/koenvo/wyscout-soccer-match-event-dataset) 에서 데이터를 받아오실 수 있습니다.
 A large part of the event preprocessing code is borrowed from [seq2Event](https://github.com/statsonthecloud/Soccer-SEQ2Event).
 
 ```
