@@ -6,9 +6,9 @@ from soccer_eventpred.env import DATA_DIR
 from soccer_eventpred.util import load_jsonlines
 
 
-@SoccerDataSource.register("wyscout")
+@SoccerDataSource.register("wyscout_offense_only")
 class WyScoutDataSource(SoccerDataSource):
-    def __init__(self, data_name: str = "wyscout", subset: str = "train.jsonl") -> None:
+    def __init__(self, data_name: str = "wyscout_offense_only", subset: str = "train.jsonl") -> None:
         self._datasource = load_jsonlines(
             DATA_DIR / data_name / "preprocessed/events" / subset
         )
