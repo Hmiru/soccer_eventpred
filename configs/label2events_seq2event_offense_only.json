@@ -1,21 +1,44 @@
 {
     "Goal": [
         "goal",
-        "own_goal"
+        "own_goal",
+        "Goal_Goal",
+        "Others on the ball_Own goal",
+        "Pass_Own goal"
     ],
     "Shot": [
-        "shot"
+        "shot",
+        "Shot_Shot",
+        "Free Kick_Free kick shot",
+        "Free Kick_Penalty"
     ],
     "Cross": [
-        "cross"
+        "cross",
+        "Pass_Cross",
+        "Free Kick_Corner",
+        "Free Kick_Free kick cross"
     ],
     "Pass": [
-        "pass"
+        "pass",
+        "Pass_Simple pass",
+        "Pass_High pass",
+        "Pass_Head pass",
+        "Free Kick_Throw in",
+        "Others on the ball_Clearance",
+        "Free Kick_Free Kick",
+        "Pass_Launch",
+        "Pass_Smart pass",
+        "Free Kick_Goal kick",
+        "Pass_Hand pass"
     ],
     "Dribble": [
-        "dribble"
+        "dribble",
+        "Duel_Ground attacking duel",
+        "Others on the ball_Touch",
+        "Others on the ball_Acceleration"
     ],
     "Change of possession": [
         "change_poss"
+
     ]
 }

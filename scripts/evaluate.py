@@ -15,9 +15,9 @@ from soccer_eventpred.util import load_json, save_as_csv, save_formatted_json
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument("--data-source", type=str, default="wyscout")
+    parser.add_argument("--data-source", type=str, default="wyscout_offense_only")
     parser.add_argument("--data-module", type=str, default="wyscout_single")
-    parser.add_argument("--data-name", type=str, default="wyscout")
+    parser.add_argument("--data-name", type=str, default="wyscout_offense_only")
     parser.add_argument(
         "-c",
         "--config",

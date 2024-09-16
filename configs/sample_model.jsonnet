@@ -51,7 +51,7 @@ local seq2vec_input_dim = time_encoder_dim + team_encoder_dim + event_encoder_di
         "lr": 1e-5,
     },
     "scheduler": {
-        "type": "torch::LinearLR",
+        "type": "torch.optim.lr_scheduler.LinearLR",
     },
     "batch_size": 128
 }

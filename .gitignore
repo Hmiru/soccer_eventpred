@@ -157,3 +157,5 @@ mlruns/
 outputs/
 data/
 !soccer_eventpred/data
+*.json
+*.jsonl
