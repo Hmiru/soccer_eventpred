@@ -254,6 +254,7 @@ class WyScoutSingleEventDataModule(SoccerDataModule):
         )
 
         for i, instance in enumerate(instances):
+
             event_times[i, : len(instance.event_times)] = torch.tensor(
                 instance.event_times, dtype=torch.long
             )

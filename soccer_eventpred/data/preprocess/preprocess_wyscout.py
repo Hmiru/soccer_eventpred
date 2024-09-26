@@ -284,9 +284,9 @@ def preprocess_wyscout_events_data(
     if offense_only:
         df = df.query("comb_event_name not in @DEFENSIVE_COMB_EVENTS")
         df=insert_change_possession_events(df)
-    else:
-        df = df.query("comb_event_name in @DEFENSIVE_COMB_EVENTS")
-
+    # else:
+    #     df = df.query("comb_event_name not in @DEFENSIVE_COMB_EVENTS")
+    #
 
     df.to_pickle(output_dir / "all_preprocessed.pkl")
     return None
@@ -310,20 +310,24 @@ def insert_change_possession_events(df: pd.DataFrame) -> pd.DataFrame:
         new_row = pd.DataFrame({
             'competition': [df.loc[prev_index, 'competition']],
             'wyscout_match_id': [df.loc[prev_index, 'wyscout_match_id']],
-            'match_period': [None],
-            'event_time_period': [None],
-            'event_time': [None],
-            'scaled_event_time': [None],
-            'wyscout_team_id': [None],
-            'team_name': [None],
-            'comb_event_name': ['change_poss'],
-            'start_pos_x': [None],
-            'start_pos_y': [None],
-            'end_pos_x': [None],
-            'end_pos_y': [None],
-            'wyscout_player_id': [None],
-            'player_name': [None],
-            'tags': [None]
+            'match_period': [df.loc[prev_index, 'match_period']],
+            'event_time_period': [df.loc[prev_index, 'event_time_period']] if pd.notna(
+                df.loc[prev_index, 'event_time_period']) else [0],
+            'event_time': [df.loc[prev_index, 'event_time']] if pd.notna(df.loc[prev_index, 'event_time']) else [0],
+            'scaled_event_time': [df.loc[prev_index, 'scaled_event_time']] if pd.notna(
+                df.loc[prev_index, 'scaled_event_time']) else [0],
+            'wyscout_team_id': [df.loc[prev_index, 'wyscout_team_id']] if pd.notna(
+                df.loc[prev_index, 'wyscout_team_id']) else [0],
+            'team_name': ['no_team'],
+            'comb_event_name': ['change_poss'],  # This is fixed as per the requirement
+            'start_pos_x': [df.loc[prev_index, 'end_pos_x']] if pd.notna(df.loc[prev_index, 'end_pos_x']) else [0],
+            'start_pos_y': [df.loc[prev_index, 'end_pos_y']] if pd.notna(df.loc[prev_index, 'end_pos_y']) else [0],
+            'end_pos_x': [df.loc[prev_index, 'end_pos_x']] if pd.notna(df.loc[prev_index, 'end_pos_x']) else [0],
+            'end_pos_y': [df.loc[prev_index, 'end_pos_y']] if pd.notna(df.loc[prev_index, 'end_pos_y']) else [0],
+            'wyscout_player_id': [df.loc[prev_index, 'wyscout_player_id']] if pd.notna(
+                df.loc[prev_index, 'wyscout_player_id']) else [0],
+            'player_name':['no_player'],
+            'tags': [None]  # Assuming tags can remain None
         })
 
         # 새로운 'change_poss' 행 추가

@@ -101,7 +101,16 @@ class SingleEventWithPerformerPredictor(EventPredictor):
         )
 
     def forward(self, batch: SingleEventBatch) -> Any:
+
+        print("Time Encoder Output:", self._time_encoder(batch.event_times).shape)
+        print("Team Encoder Output:", self._team_encoder(batch.team_ids).shape)
+        print("Event Encoder Output:", self._event_encoder(batch.event_ids).shape)
+
+
         if self._player_encoder is not None:
+            print("Player Encoder Output:", self._player_encoder(batch.player_ids).shape)
+            print("X Axis Encoder Output:", self._x_axis_encoder(batch.start_pos_x).shape)
+            print("Y Axis Encoder Output:", self._y_axis_encoder(batch.start_pos_y).shape)
             embeddings = self._seq2vec_encoder(
                 inputs=torch.cat(
                     (
@@ -123,9 +132,15 @@ class SingleEventWithPerformerPredictor(EventPredictor):
                                 dim=1,
                             )
                         ),
-                        self._player_encoder(batch.player_ids),
-                        self._x_axis_encoder(batch.start_pos_x),
-                        self._y_axis_encoder(batch.start_pos_y),
+                        self._player_encoder(batch.player_ids) if self._player_encoder is not None else None,
+                        torch.cat(
+                            (self._x_axis_encoder(batch.start_pos_x), self._y_axis_encoder(batch.end_pos_x)),
+                            dim=2
+                        ),
+                        torch.cat(
+                            (self._x_axis_encoder(batch.start_pos_y), self._y_axis_encoder(batch.end_pos_y)),
+                            dim=2
+                        ),
                     ),
                     dim=2,
                 ),
@@ -165,6 +180,13 @@ class SingleEventWithPerformerPredictor(EventPredictor):
         assert embeddings.shape[1] == self._seq2vec_encoder.get_output_dim()
         embeddings = torch.tanh(embeddings)
         output = self._event_projection(embeddings)
+        print("Batch Team IDs:", batch.team_ids.shape)
+        print("Batch Event IDs:", batch.event_ids.shape)
+        print("Batch Player IDs:", batch.player_ids.shape)
+        print("Batch Start Pos X:", batch.start_pos_x.shape)
+        print("Batch Start Pos Y:", batch.start_pos_y.shape)
+        print("Batch End Pos X:", batch.end_pos_x.shape)
+        print("Batch End Pos Y:", batch.end_pos_y.shape)
         return output
 
     def training_step(
