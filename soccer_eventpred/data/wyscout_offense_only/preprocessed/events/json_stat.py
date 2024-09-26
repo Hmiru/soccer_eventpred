@@ -5,54 +5,8 @@ df=df.reset_index(drop=True)
 pd.set_option("display.max_columns", 150)
 df = df.head(25)
 
-# 현재 사용 중인 df 설정
-df['changed'] = df['wyscout_team_id'] != df['wyscout_team_id'].shift(1)
-df.loc[0, 'changed'] = False  # 첫 번째 행은 변화를 감지하지 않도록 설정
-change_indices = df[df['changed']].index.tolist()
-print(df)
-print(change_indices)
-new_rows = []
-prev_index = 0
-#
-# # 변화 인덱스마다 반복
-for index in change_indices:
-    # 변화 전까지의 행들을 추가
-    new_rows.append(df.iloc[prev_index:index])
-
-    # 'change_poss' 행을 생성
-    new_row = pd.DataFrame({
-       'competition': [df.loc[prev_index, 'competition']],
-       'wyscout_match_id': [df.loc[prev_index, 'wyscout_match_id']],
-       'match_period': [None],
-       'event_time_period': [None],
-        'event_time': [None],
-        'scaled_event_time': [None],
-        'wyscout_team_id': [None],
-        'team_name': [None],
-        'comb_event_name': ['change_poss'],
-        'start_pos_x': [None],
-        'start_pos_y': [None],
-        'end_pos_x': [None],
-        'end_pos_y': [None],
-        'wyscout_player_id': [None],
-        'player_name': [None],
-        'tags': [None]
-    })
-
-    # 새로운 'change_poss' 행 추가
-    new_rows.append(new_row)
-
-    # 인덱스 업데이트
-    prev_index = index
-
-# 마지막으로 남은 부분 추가
-new_rows.append(df.iloc[prev_index:])
-
-# 최종 데이터프레임 생성
-df_final = pd.concat(new_rows, ignore_index=True)
-
 # 결과 출력
-print(df_final)
+print(df)
 
 
 import pandas as pd
