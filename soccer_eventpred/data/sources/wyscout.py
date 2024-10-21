@@ -27,3 +27,9 @@ class WyScoutDataSource(SoccerDataSource):
 
     def collect(self) -> Iterator[Any]:
         yield from self._data
+
+    def __len__(self) -> int:
+        return len(self._data)
+
+    def __getitem__(self, idx: int) -> WyScoutEventSequence:
+        return self._data[idx]

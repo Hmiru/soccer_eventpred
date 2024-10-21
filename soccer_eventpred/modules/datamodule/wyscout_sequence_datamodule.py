@@ -191,7 +191,9 @@ class WyScoutSequenceDataModule(SoccerDataModule):
         )
 
     def batch_collator(self, instances: List[Instance]) -> Batch:
-        max_length = max(len(instance.event_ids) for instance in instances)
+
+        max_length=40
+
         event_times = cast(
             torch.LongTensor,
             torch.full((len(instances), max_length), 120, dtype=torch.long),
@@ -240,33 +242,51 @@ class WyScoutSequenceDataModule(SoccerDataModule):
             torch.BoolTensor,
             torch.zeros((len(instances), max_length), dtype=torch.bool),
         )
-
         for i, instance in enumerate(instances):
-            event_times[i, : len(instance.event_times)] = torch.tensor(
-                instance.event_times, dtype=torch.long
-            )
-            team_ids[i, : len(instance.team_ids)] = torch.tensor(
-                instance.team_ids, dtype=torch.long
-            )
-            event_ids[i, : len(instance.event_ids)] = torch.tensor(
-                instance.event_ids, dtype=torch.long
-            )
-            player_ids[i, : len(instance.player_ids)] = torch.tensor(
-                instance.player_ids, dtype=torch.long
-            )
-            start_pos_x[i, : len(instance.start_pos_x)] = torch.tensor(
-                instance.start_pos_x, dtype=torch.long
-            )
-            start_pos_y[i, : len(instance.start_pos_y)] = torch.tensor(
-                instance.start_pos_y, dtype=torch.long
-            )
-            end_pos_x[i, : len(instance.end_pos_x)] = torch.tensor(
-                instance.end_pos_x, dtype=torch.long
-            )
-            end_pos_y[i, : len(instance.end_pos_y)] = torch.tensor(
-                instance.end_pos_y, dtype=torch.long
-            )
-            mask[i, : len(instance.event_ids)] = True
+            # 시퀀스 길이 확인
+            print(f"Instance {i}: Event IDs length: {len(instance.event_ids)}")
+
+            last_events = instance.event_ids[-40:] if len(instance.event_ids) >= 40 else instance.event_ids
+
+            # 시퀀스가 0인지 확인
+            if len(last_events) == 0:
+                print(f"Warning: Instance {i} has zero-length sequence!")
+
+            event_times[i, : len(last_events)] = torch.tensor(instance.event_times[-len(last_events):], dtype=torch.long)
+            team_ids[i, : len(last_events)] = torch.tensor(instance.team_ids[-len(last_events):], dtype=torch.long)
+            event_ids[i, : len(last_events)] = torch.tensor(last_events, dtype=torch.long)
+            player_ids[i, : len(last_events)] = torch.tensor(instance.player_ids[-len(last_events):], dtype=torch.long)
+            start_pos_x[i, : len(last_events)] = torch.tensor(instance.start_pos_x[-len(last_events):], dtype=torch.long)
+            start_pos_y[i, : len(last_events)] = torch.tensor(instance.start_pos_y[-len(last_events):], dtype=torch.long)
+            end_pos_x[i, : len(last_events)] = torch.tensor(instance.end_pos_x[-len(last_events):], dtype=torch.long)
+            end_pos_y[i, : len(last_events)] = torch.tensor(instance.end_pos_y[-len(last_events):], dtype=torch.long)
+            mask[i, : len(last_events)] = True
+
+            # event_times[i, : len(instance.event_times)] = torch.tensor(
+            #     instance.event_times, dtype=torch.long
+            # )
+            # team_ids[i, : len(instance.team_ids)] = torch.tensor(
+            #     instance.team_ids, dtype=torch.long
+            # )
+            # event_ids[i, : len(instance.event_ids)] = torch.tensor(
+            #     instance.event_ids, dtype=torch.long
+            # )
+            # player_ids[i, : len(instance.player_ids)] = torch.tensor(
+            #     instance.player_ids, dtype=torch.long
+            # )
+            # start_pos_x[i, : len(instance.start_pos_x)] = torch.tensor(
+            #     instance.start_pos_x, dtype=torch.long
+            # )
+            # start_pos_y[i, : len(instance.start_pos_y)] = torch.tensor(
+            #     instance.start_pos_y, dtype=torch.long
+            # )
+            # end_pos_x[i, : len(instance.end_pos_x)] = torch.tensor(
+            #     instance.end_pos_x, dtype=torch.long
+            # )
+            # end_pos_y[i, : len(instance.end_pos_y)] = torch.tensor(
+            #     instance.end_pos_y, dtype=torch.long
+            # )
+            # mask[i, : len(instance.event_ids)] = True
 
         return Batch(
             event_times=event_times,
