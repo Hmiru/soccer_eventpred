@@ -35,6 +35,10 @@ class SingleEventWithPerformerPredictor(EventPredictor):
         class_weight: Optional[torch.Tensor] = None,
     ) -> None:
         super().__init__()
+
+        event_vocab=datamodule.vocab.get_namespace_tokens("events")
+        print(event_vocab)
+
         self._time_encoder = TokenEmbedder.from_params(params_=time_encoder)
         self._team_encoder = TokenEmbedder.from_params(
             params_=team_encoder,
@@ -102,15 +106,18 @@ class SingleEventWithPerformerPredictor(EventPredictor):
 
     def forward(self, batch: SingleEventBatch) -> Any:
 
-        print("Time Encoder Output:", self._time_encoder(batch.event_times).shape)
-        print("Team Encoder Output:", self._team_encoder(batch.team_ids).shape)
-        print("Event Encoder Output:", self._event_encoder(batch.event_ids).shape)
+
+        # event_vocab = self._datamodule.vocab.get_namespace_tokens("events")
+        # # 이벤트 ID 중 마지막 이벤트
+        # last_event_ids = batch.event_ids[:, -5]
+        # print(last_event_ids)
+        # # 마지막 이벤트를 이름으로 변환
+        # for i, event_id in enumerate(last_event_ids):
+        #     event_name = event_vocab[event_id]  # 이벤트 ID -> 이벤트 이름 변환
+        #     print(f"Sequence {i}: Last Event ID: {event_id}, Event Name: {event_name}")
 
 
         if self._player_encoder is not None:
-            print("Player Encoder Output:", self._player_encoder(batch.player_ids).shape)
-            print("X Axis Encoder Output:", self._x_axis_encoder(batch.start_pos_x).shape)
-            print("Y Axis Encoder Output:", self._y_axis_encoder(batch.start_pos_y).shape)
             embeddings = self._seq2vec_encoder(
                 inputs=torch.cat(
                     (
@@ -132,13 +139,15 @@ class SingleEventWithPerformerPredictor(EventPredictor):
                                 dim=1,
                             )
                         ),
-                        self._player_encoder(batch.player_ids) if self._player_encoder is not None else None,
+                        self._player_encoder(batch.player_ids),
+                        # self._x_axis_encoder(batch.start_pos_x),
+                        # self._y_axis_encoder(batch.start_pos_y),
                         torch.cat(
-                            (self._x_axis_encoder(batch.start_pos_x), self._y_axis_encoder(batch.end_pos_x)),
+                            (self._x_axis_encoder(batch.start_pos_x), self._y_axis_encoder(batch.start_pos_y)),
                             dim=2
                         ),
                         torch.cat(
-                            (self._x_axis_encoder(batch.start_pos_y), self._y_axis_encoder(batch.end_pos_y)),
+                            (self._x_axis_encoder(batch.end_pos_x), self._y_axis_encoder(batch.end_pos_y)),
                             dim=2
                         ),
                     ),
@@ -180,13 +189,6 @@ class SingleEventWithPerformerPredictor(EventPredictor):
         assert embeddings.shape[1] == self._seq2vec_encoder.get_output_dim()
         embeddings = torch.tanh(embeddings)
         output = self._event_projection(embeddings)
-        print("Batch Team IDs:", batch.team_ids.shape)
-        print("Batch Event IDs:", batch.event_ids.shape)
-        print("Batch Player IDs:", batch.player_ids.shape)
-        print("Batch Start Pos X:", batch.start_pos_x.shape)
-        print("Batch Start Pos Y:", batch.start_pos_y.shape)
-        print("Batch End Pos X:", batch.end_pos_x.shape)
-        print("Batch End Pos Y:", batch.end_pos_y.shape)
         return output
 
     def training_step(

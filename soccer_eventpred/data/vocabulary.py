@@ -43,3 +43,7 @@ class Vocabulary:
 
     def size(self, namespace: str = "tokens") -> int:
         return len(self._token2index[namespace])
+
+    def get_namespace_tokens(self, namespace: str = "tokens") -> list[str]:
+        """특정 네임스페이스의 모든 토큰을 반환합니다."""
+        return list(self._token2index[namespace].keys())

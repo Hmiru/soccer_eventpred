@@ -105,93 +105,136 @@ class WyScoutSequenceEventPredictor(EventPredictor):
         )
 
     def forward(self, batch: Batch) -> Any:
+        # 마스크는 이미 40 길이로 준비되어 있으므로 슬라이싱만 필요
+        print(f"Batch shape: {batch.event_times.shape}")
+
         if self._player_encoder is not None:
             embeddings = self._seq2seq_encoder(
                 inputs=torch.cat(
                     (
-                        self._time_encoder(batch.event_times),
-                        self._team_encoder(batch.team_ids),
-                        self._event_encoder(batch.event_ids),
-                        self._player_encoder(batch.player_ids),
-                        self._x_axis_encoder(batch.start_pos_x),
-                        self._y_axis_encoder(batch.start_pos_y),
-                        self._x_axis_encoder(batch.end_pos_x),
-                        self._y_axis_encoder(batch.end_pos_y),
+                        self._time_encoder(batch.event_times[:, :-1]),  # 첫 39개 이벤트 사용
+                        self._team_encoder(batch.team_ids[:, :-1]),
+                        self._event_encoder(batch.event_ids[:, :-1]),
+                        self._player_encoder(batch.player_ids[:, :-1]),
+                        self._x_axis_encoder(batch.start_pos_x[:, :-1]),
+                        self._y_axis_encoder(batch.start_pos_y[:, :-1]),
+                        self._x_axis_encoder(batch.end_pos_x[:, :-1]),
+                        self._y_axis_encoder(batch.end_pos_y[:, :-1]),
                     ),
                     dim=2,
                 ),
-                mask=batch.mask,
+                mask=batch.mask[:, :-1],  # 첫 39개 이벤트의 마스크 사용
             )
         else:
             embeddings = self._seq2seq_encoder(
                 inputs=torch.cat(
                     (
-                        self._time_encoder(batch.event_times),
-                        self._team_encoder(batch.team_ids),
-                        self._event_encoder(batch.event_ids),
-                        self._x_axis_encoder(batch.start_pos_x),
-                        self._y_axis_encoder(batch.start_pos_y),
-                        self._x_axis_encoder(batch.end_pos_x),
-                        self._y_axis_encoder(batch.end_pos_y),
+                        self._time_encoder(batch.event_times[:, :-1]),
+                        self._team_encoder(batch.team_ids[:, :-1]),
+                        self._event_encoder(batch.event_ids[:, :-1]),
+                        self._x_axis_encoder(batch.start_pos_x[:, :-1]),
+                        self._y_axis_encoder(batch.start_pos_y[:, :-1]),
+                        self._x_axis_encoder(batch.end_pos_x[:, :-1]),
+                        self._y_axis_encoder(batch.end_pos_y[:, :-1]),
                     ),
                     dim=2,
                 ),
-                mask=batch.mask,
+                mask=batch.mask[:, :-1],  # 첫 39개 이벤트의 마스크 사용
             )
         embeddings = torch.tanh(embeddings)
         output = self._event_projection(embeddings)
         return output
 
     def training_step(self, batch: Batch, batch_idx: int) -> Any:
+
         output = self.forward(batch)
+
+        # Correctly select the last event as the target
+        targets = batch.event_ids[:, -1]
+
+        # Use the prediction for the last event (40th)
         loss = self.loss_fn(
-            F.softmax(output[:, :-1], dim=2).permute(0, 2, 1), batch.event_ids[:, 1:]
-        )  # (batch, seq, num_classes)
-        loss *= batch.mask[:, 1:]
-        loss = loss.sum() / batch.mask[:, 1:].sum()
-        pred = torch.argmax(F.softmax(output[:, :-1], dim=2), dim=2)
-        self.train_metrics(pred, batch.event_ids[:, 1:])
+            F.softmax(output[:, -1], dim=1),  # Apply softmax to the last time step
+            targets
+        )
+
+        # Apply mask for the last event
+        loss *= batch.mask[:, -1]
+        loss = loss.sum() / batch.mask[:, -1:].sum()
+
+        # Calculate predictions for the last event
+        pred = torch.argmax(F.softmax(output[:, -1], dim=1), dim=1)
+
+        # Log metrics
+        self.train_metrics(pred, targets)
         self.log("train_loss", loss)
         self.log_dict(self.train_metrics)  # type: ignore
         return loss
 
     def validation_step(self, batch: Batch, batch_idx: int) -> Any:
         output = self.forward(batch)
+
+        # Correct target for the last event
+        targets = batch.event_ids[:, -1]
+
+        # Use prediction for the last event (40th)
         loss = self.loss_fn(
-            F.softmax(output[:, :-1], dim=2).permute(0, 2, 1),
-            batch.event_ids[:, 1:],
+            F.softmax(output[:, -1], dim=1),
+            targets
         )
-        loss *= batch.mask[:, 1:]
-        loss = loss.sum() / batch.mask[:, 1:].sum()
-        pred = torch.argmax(F.softmax(output[:, :-1], dim=2), dim=2)
-        self.valid_metrics(pred, batch.event_ids[:, 1:])
+
+        # Apply mask for the last event (차원을 맞춰줌)
+        loss *= batch.mask[:, -1]
+
+        loss = loss.sum() / batch.mask[:, -1].sum()
+
+        # Calculate predictions for the last event
+        pred = torch.argmax(F.softmax(output[:, -1], dim=1), dim=1)
+
+        # Log metrics
+        self.valid_metrics(pred, targets)
         self.log("valid_loss", loss)
         self.log_dict(self.valid_metrics)  # type: ignore
         return loss
 
     def test_step(self, batch: Batch, batch_idx: int) -> Any:
         output = self.forward(batch)
+
+        # Correct target for the last event
+        targets = batch.event_ids[:, -1]
+
+        # Use prediction for the last event (40th)
         loss = self.loss_fn(
-            F.softmax(output[:, :-1], dim=2).permute(0, 2, 1),
-            batch.event_ids[:, 1:],
+            F.softmax(output[:, -1], dim=1),  # dim=1로 수정
+            targets
         )
-        loss *= batch.mask[:, 1:]
-        loss = loss.sum() / batch.mask[:, 1:].sum()
-        pred = torch.argmax(F.softmax(output[:, :-1], dim=2), dim=2)
-        self.test_metrics(pred, batch.event_ids[:, 1:])
+
+        # Apply mask for the last event
+        loss *= batch.mask[:, -1:]
+        loss = loss.sum() / batch.mask[:, -1:].sum()
+
+        # Calculate predictions for the last event
+        pred = torch.argmax(F.softmax(output[:, -1], dim=1), dim=1)  # dim=1로 수정
+
+        # Log metrics
+        self.test_metrics(pred, targets)
         self.log("test_loss", loss)
-        self.log_dict(self.test_metrics)  # type: ignore
+        self.log_dict(self.test_metrics)
         return loss
 
     def predict_step(self, batch, batch_idx, dataloader_idx=0):
         output = self.forward(batch)
-        pred = torch.argmax(F.softmax(output[:, :-1], dim=2), dim=2)
+        # 마지막 40번째 이벤트에 대한 예측만 사용
+        pred = torch.argmax(F.softmax(output[:, -1], dim=1), dim=1)  # dim=1로 수정
         return pred
 
     def predict(self, batch):
         output = self.forward(batch)
-        pred = torch.argmax(F.softmax(output[:, :-1], dim=2), dim=2)
-        gold = batch.event_ids[:, 1:]
+        # 마지막 40번째 이벤트에 대한 예측만 사용
+        pred = torch.argmax(F.softmax(output[:, -1], dim=1), dim=1)  # dim=1로 수정
+
+        # 올바른 타겟 설정 (마지막 40번째 이벤트만 타겟으로 설정)
+        gold = batch.event_ids[:, -1]
         return gold, pred
 
     def configure_optimizers(self):
