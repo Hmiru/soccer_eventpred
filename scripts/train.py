@@ -96,6 +96,7 @@ if __name__ == "__main__":
 
     logger.info("Loading data")
     if args.test_run:
+        print("Test run")
         args.epochs = 1
         train_datasource = SoccerDataSource.from_params(
             params_={
@@ -120,6 +121,7 @@ if __name__ == "__main__":
         )
 
     else:
+
         train_datasource = SoccerDataSource.from_params(
             params_={
                 "type": args.data_source,
@@ -154,8 +156,18 @@ if __name__ == "__main__":
         batch_size=params["batch_size"],
         label2events=label2events,
     )
+
+    train_loader = datamodule._train_dataset
+    batch_size = datamodule.batch_size
+    train_loader_size = len(train_loader)
+
+
+
+
     logger.info("Preparing datamodule...")
     datamodule.build_vocab()
+
+
 
     logger.info("Calculating class weights...")
     if args.class_weight_type is not None:
@@ -235,7 +247,7 @@ if __name__ == "__main__":
     )
     early_stopping_callback = pl.callbacks.EarlyStopping(
         monitor="valid_loss",
-        patience=5,
+        patience=10,
         mode="min",
         min_delta=0.0001,
     )

@@ -105,14 +105,14 @@ class WyScoutSequenceEventPredictor(EventPredictor):
         )
 
     def forward(self, batch: Batch) -> Any:
-        # 마스크는 이미 40 길이로 준비되어 있으므로 슬라이싱만 필요
-        print(f"Batch shape: {batch.event_times.shape}")
+
 
         if self._player_encoder is not None:
             embeddings = self._seq2seq_encoder(
+                # last 39 events are used as input
                 inputs=torch.cat(
                     (
-                        self._time_encoder(batch.event_times[:, :-1]),  # 첫 39개 이벤트 사용
+                        self._time_encoder(batch.event_times[:, :-1]),#all events except the last one
                         self._team_encoder(batch.team_ids[:, :-1]),
                         self._event_encoder(batch.event_ids[:, :-1]),
                         self._player_encoder(batch.player_ids[:, :-1]),
@@ -121,9 +121,9 @@ class WyScoutSequenceEventPredictor(EventPredictor):
                         self._x_axis_encoder(batch.end_pos_x[:, :-1]),
                         self._y_axis_encoder(batch.end_pos_y[:, :-1]),
                     ),
-                    dim=2,
+                    dim=2, #concatenate along the last dimension; embedding dim
                 ),
-                mask=batch.mask[:, :-1],  # 첫 39개 이벤트의 마스크 사용
+                mask=batch.mask[:, :-1],
             )
         else:
             embeddings = self._seq2seq_encoder(
@@ -137,9 +137,9 @@ class WyScoutSequenceEventPredictor(EventPredictor):
                         self._x_axis_encoder(batch.end_pos_x[:, :-1]),
                         self._y_axis_encoder(batch.end_pos_y[:, :-1]),
                     ),
-                    dim=2,
+                    dim=2,#same as above
                 ),
-                mask=batch.mask[:, :-1],  # 첫 39개 이벤트의 마스크 사용
+                mask=batch.mask[:, :-1],#mask for all events except the last one
             )
         embeddings = torch.tanh(embeddings)
         output = self._event_projection(embeddings)
@@ -148,27 +148,25 @@ class WyScoutSequenceEventPredictor(EventPredictor):
     def training_step(self, batch: Batch, batch_idx: int) -> Any:
 
         output = self.forward(batch)
-
         # Correctly select the last event as the target
-        targets = batch.event_ids[:, -1]
+        targets = batch.event_ids[:, -1]#last event as the target
 
-        # Use the prediction for the last event (40th)
+
         loss = self.loss_fn(
             F.softmax(output[:, -1], dim=1),  # Apply softmax to the last time step
             targets
-        )
+        )# calculate loss for the last event
 
         # Apply mask for the last event
-        loss *= batch.mask[:, -1]
+        loss *= batch.mask[:, -1]#mask for the last event
         loss = loss.sum() / batch.mask[:, -1:].sum()
 
-        # Calculate predictions for the last event
-        pred = torch.argmax(F.softmax(output[:, -1], dim=1), dim=1)
 
-        # Log metrics
+        pred = torch.argmax(F.softmax(output[:, -1], dim=1), dim=1)# event that has the highest probability
+
         self.train_metrics(pred, targets)
         self.log("train_loss", loss)
-        self.log_dict(self.train_metrics)  # type: ignore
+        self.log_dict(self.train_metrics)
         return loss
 
     def validation_step(self, batch: Batch, batch_idx: int) -> Any:
@@ -191,7 +189,7 @@ class WyScoutSequenceEventPredictor(EventPredictor):
         # Calculate predictions for the last event
         pred = torch.argmax(F.softmax(output[:, -1], dim=1), dim=1)
 
-        # Log metrics
+
         self.valid_metrics(pred, targets)
         self.log("valid_loss", loss)
         self.log_dict(self.valid_metrics)  # type: ignore
@@ -205,18 +203,18 @@ class WyScoutSequenceEventPredictor(EventPredictor):
 
         # Use prediction for the last event (40th)
         loss = self.loss_fn(
-            F.softmax(output[:, -1], dim=1),  # dim=1로 수정
+            F.softmax(output[:, -1], dim=1),
             targets
         )
 
-        # Apply mask for the last event
-        loss *= batch.mask[:, -1:]
-        loss = loss.sum() / batch.mask[:, -1:].sum()
+
+        loss *= batch.mask[:, -1]
+        loss = loss.sum() / batch.mask[:, -1].sum()
 
         # Calculate predictions for the last event
         pred = torch.argmax(F.softmax(output[:, -1], dim=1), dim=1)  # dim=1로 수정
 
-        # Log metrics
+
         self.test_metrics(pred, targets)
         self.log("test_loss", loss)
         self.log_dict(self.test_metrics)
@@ -224,16 +222,16 @@ class WyScoutSequenceEventPredictor(EventPredictor):
 
     def predict_step(self, batch, batch_idx, dataloader_idx=0):
         output = self.forward(batch)
-        # 마지막 40번째 이벤트에 대한 예측만 사용
+        # Calculate predictions for the last event
         pred = torch.argmax(F.softmax(output[:, -1], dim=1), dim=1)  # dim=1로 수정
         return pred
 
     def predict(self, batch):
         output = self.forward(batch)
-        # 마지막 40번째 이벤트에 대한 예측만 사용
+
         pred = torch.argmax(F.softmax(output[:, -1], dim=1), dim=1)  # dim=1로 수정
 
-        # 올바른 타겟 설정 (마지막 40번째 이벤트만 타겟으로 설정)
+        # Correct target for the last event
         gold = batch.event_ids[:, -1]
         return gold, pred
 
