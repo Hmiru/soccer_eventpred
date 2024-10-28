@@ -201,8 +201,7 @@ class WyScoutSingleEventDataModule(SoccerDataModule):
         )
 
     def batch_collator(self, instances: List[Instance]) -> SingleEventBatch:
-        print([len(instance.event_ids) for instance in instances])
-        print(f'instances length: {len(instances)}')
+
         max_length = max(len(instance.event_ids) for instance in instances)
         event_times = cast(
             torch.LongTensor,

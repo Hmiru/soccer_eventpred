@@ -191,17 +191,32 @@ class WyScoutSequenceDataModule(SoccerDataModule):
         )
 
     def batch_collator(self, instances: List[Instance]) -> Batch:
+        '''
+
+        :param instances: List which is a batch of instances
+        :return: Batch object which is a batch of tensors
+        '''
+
 
         max_length=40
-
+        windows_per_instance=[]
+        for instance in instances:
+            num_windows=max(1, len(instance.event_ids)-max_length+1)
+            windows_per_instance.append(num_windows) # number of windows for each instance
+        total_windows=sum(windows_per_instance)
+        '''
+        make empty tensors of size (total_windows, max_length) for each attribute
+        '''
         event_times = cast(
             torch.LongTensor,
-            torch.full((len(instances), max_length), 120, dtype=torch.long),
+            torch.full(
+                (total_windows, max_length),
+                120, dtype=torch.long),
         )
         team_ids = cast(
             torch.LongTensor,
             torch.full(
-                (len(instances), max_length),
+                (total_windows, max_length),
                 self.vocab.get(PAD_TOKEN, "teams"),
                 dtype=torch.long,
             ),
@@ -209,7 +224,7 @@ class WyScoutSequenceDataModule(SoccerDataModule):
         event_ids = cast(
             torch.LongTensor,
             torch.full(
-                (len(instances), max_length),
+                (total_windows, max_length),
                 self.vocab.get(PAD_TOKEN, "events"),
                 dtype=torch.long,
             ),
@@ -217,76 +232,55 @@ class WyScoutSequenceDataModule(SoccerDataModule):
         player_ids = cast(
             torch.LongTensor,
             torch.full(
-                (len(instances), max_length),
+                (total_windows, max_length),
                 self.vocab.get(PAD_TOKEN, "players"),
                 dtype=torch.long,
             ),
         )
         start_pos_x = cast(
             torch.LongTensor,
-            torch.full((len(instances), max_length), 101, dtype=torch.long),
+            torch.full((total_windows, max_length),
+                       101, dtype=torch.long),
         )
         start_pos_y = cast(
             torch.LongTensor,
-            torch.full((len(instances), max_length), 101, dtype=torch.long),
+            torch.full((total_windows, max_length),
+                       101, dtype=torch.long),
         )
         end_pos_x = cast(
             torch.LongTensor,
-            torch.full((len(instances), max_length), 101, dtype=torch.long),
+            torch.full((total_windows, max_length),
+                       101, dtype=torch.long),
         )
         end_pos_y = cast(
             torch.LongTensor,
-            torch.full((len(instances), max_length), 101, dtype=torch.long),
+            torch.full((total_windows, max_length),
+                       101, dtype=torch.long),
         )
         mask = cast(
             torch.BoolTensor,
-            torch.zeros((len(instances), max_length), dtype=torch.bool),
+            torch.zeros((total_windows, max_length),
+            dtype=torch.bool),
         )
-        for i, instance in enumerate(instances):
-            # 시퀀스 길이 확인
-            print(f"Instance {i}: Event IDs length: {len(instance.event_ids)}")
 
-            last_events = instance.event_ids[-40:] if len(instance.event_ids) >= 40 else instance.event_ids
-
-            # 시퀀스가 0인지 확인
-            if len(last_events) == 0:
-                print(f"Warning: Instance {i} has zero-length sequence!")
-
-            event_times[i, : len(last_events)] = torch.tensor(instance.event_times[-len(last_events):], dtype=torch.long)
-            team_ids[i, : len(last_events)] = torch.tensor(instance.team_ids[-len(last_events):], dtype=torch.long)
-            event_ids[i, : len(last_events)] = torch.tensor(last_events, dtype=torch.long)
-            player_ids[i, : len(last_events)] = torch.tensor(instance.player_ids[-len(last_events):], dtype=torch.long)
-            start_pos_x[i, : len(last_events)] = torch.tensor(instance.start_pos_x[-len(last_events):], dtype=torch.long)
-            start_pos_y[i, : len(last_events)] = torch.tensor(instance.start_pos_y[-len(last_events):], dtype=torch.long)
-            end_pos_x[i, : len(last_events)] = torch.tensor(instance.end_pos_x[-len(last_events):], dtype=torch.long)
-            end_pos_y[i, : len(last_events)] = torch.tensor(instance.end_pos_y[-len(last_events):], dtype=torch.long)
-            mask[i, : len(last_events)] = True
-
-            # event_times[i, : len(instance.event_times)] = torch.tensor(
-            #     instance.event_times, dtype=torch.long
-            # )
-            # team_ids[i, : len(instance.team_ids)] = torch.tensor(
-            #     instance.team_ids, dtype=torch.long
-            # )
-            # event_ids[i, : len(instance.event_ids)] = torch.tensor(
-            #     instance.event_ids, dtype=torch.long
-            # )
-            # player_ids[i, : len(instance.player_ids)] = torch.tensor(
-            #     instance.player_ids, dtype=torch.long
-            # )
-            # start_pos_x[i, : len(instance.start_pos_x)] = torch.tensor(
-            #     instance.start_pos_x, dtype=torch.long
-            # )
-            # start_pos_y[i, : len(instance.start_pos_y)] = torch.tensor(
-            #     instance.start_pos_y, dtype=torch.long
-            # )
-            # end_pos_x[i, : len(instance.end_pos_x)] = torch.tensor(
-            #     instance.end_pos_x, dtype=torch.long
-            # )
-            # end_pos_y[i, : len(instance.end_pos_y)] = torch.tensor(
-            #     instance.end_pos_y, dtype=torch.long
-            # )
-            # mask[i, : len(instance.event_ids)] = True
+        window_idx=0
+        for instance in instances:
+            sequence_length=len(instance.event_ids) # length of the sequence
+            for start_idx in range(0, sequence_length-max_length+1):
+                end_idx = start_idx + max_length
+                '''
+                fill the tensors with the values of the current window
+                '''
+                event_times[window_idx, : max_length] = torch.tensor(instance.event_times[start_idx:end_idx], dtype=torch.long)
+                team_ids[window_idx, : max_length] = torch.tensor(instance.team_ids[start_idx:end_idx], dtype=torch.long)
+                event_ids[window_idx, : max_length] = torch.tensor(instance.event_ids[start_idx:end_idx], dtype=torch.long)
+                player_ids[window_idx, : max_length] = torch.tensor(instance.player_ids[start_idx:end_idx], dtype=torch.long)
+                start_pos_x[window_idx, : max_length] = torch.tensor(instance.start_pos_x[start_idx:end_idx], dtype=torch.long)
+                start_pos_y[window_idx, : max_length] = torch.tensor(instance.start_pos_y[start_idx:end_idx], dtype=torch.long)
+                end_pos_x[window_idx, : max_length] = torch.tensor(instance.end_pos_x[start_idx:end_idx], dtype=torch.long)
+                end_pos_y[window_idx, : max_length] = torch.tensor(instance.end_pos_y[start_idx:end_idx], dtype=torch.long)
+                mask[window_idx, : max_length] = True
+                window_idx+=1 # increment window index
 
         return Batch(
             event_times=event_times,
@@ -299,3 +293,64 @@ class WyScoutSequenceDataModule(SoccerDataModule):
             end_pos_y=end_pos_y,
             mask=mask,
         )
+
+
+
+
+
+
+
+        # for i, instance in enumerate(instances):
+        # # slice the last 40 events
+        #     last_events = instance.event_ids[-40:] if len(instance.event_ids) >= 40 else instance.event_ids
+        #
+        #     if len(last_events) == 0:
+        #         print(f"Warning: Instance {i} has zero-length sequence!")
+        #
+        #     event_times[i, : len(last_events)] = torch.tensor(instance.event_times[-len(last_events):], dtype=torch.long)
+        #     team_ids[i, : len(last_events)] = torch.tensor(instance.team_ids[-len(last_events):], dtype=torch.long)
+        #     event_ids[i, : len(last_events)] = torch.tensor(last_events, dtype=torch.long)
+        #     player_ids[i, : len(last_events)] = torch.tensor(instance.player_ids[-len(last_events):], dtype=torch.long)
+        #     start_pos_x[i, : len(last_events)] = torch.tensor(instance.start_pos_x[-len(last_events):], dtype=torch.long)
+        #     start_pos_y[i, : len(last_events)] = torch.tensor(instance.start_pos_y[-len(last_events):], dtype=torch.long)
+        #     end_pos_x[i, : len(last_events)] = torch.tensor(instance.end_pos_x[-len(last_events):], dtype=torch.long)
+        #     end_pos_y[i, : len(last_events)] = torch.tensor(instance.end_pos_y[-len(last_events):], dtype=torch.long)
+        #     mask[i, : len(last_events)] = True
+        #
+        #     # event_times[i, : len(instance.event_times)] = torch.tensor(
+        #     #     instance.event_times, dtype=torch.long
+        #     # )
+        #     # team_ids[i, : len(instance.team_ids)] = torch.tensor(
+        #     #     instance.team_ids, dtype=torch.long
+        #     # )
+        #     # event_ids[i, : len(instance.event_ids)] = torch.tensor(
+        #     #     instance.event_ids, dtype=torch.long
+        #     # )
+        #     # player_ids[i, : len(instance.player_ids)] = torch.tensor(
+        #     #     instance.player_ids, dtype=torch.long
+        #     # )
+        #     # start_pos_x[i, : len(instance.start_pos_x)] = torch.tensor(
+        #     #     instance.start_pos_x, dtype=torch.long
+        #     # )
+        #     # start_pos_y[i, : len(instance.start_pos_y)] = torch.tensor(
+        #     #     instance.start_pos_y, dtype=torch.long
+        #     # )
+        #     # end_pos_x[i, : len(instance.end_pos_x)] = torch.tensor(
+        #     #     instance.end_pos_x, dtype=torch.long
+        #     # )
+        #     # end_pos_y[i, : len(instance.end_pos_y)] = torch.tensor(
+        #     #     instance.end_pos_y, dtype=torch.long
+        #     # )
+        #     # mask[i, : len(instance.event_ids)] = True
+        #
+        # return Batch(
+        #     event_times=event_times,
+        #     team_ids=team_ids,
+        #     event_ids=event_ids,
+        #     player_ids=player_ids,
+        #     start_pos_x=start_pos_x,
+        #     start_pos_y=start_pos_y,
+        #     end_pos_x=end_pos_x,
+        #     end_pos_y=end_pos_y,
+        #     mask=mask,
+        # )
