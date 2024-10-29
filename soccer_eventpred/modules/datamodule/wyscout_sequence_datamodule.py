@@ -192,6 +192,8 @@ class WyScoutSequenceDataModule(SoccerDataModule):
 
     def batch_collator(self, instances: List[Instance]) -> Batch:
         '''
+        입력으로 받은 instances에서 각 instance에 대해, step size가 1인 슬라이딩 윈도우 기법을 사용하여 최대 40개의 이벤트 시퀀스를 추출합니다. 
+        각 `instance` 내에서 생성되는 윈도우의 개수는 window_size = len(instance) - 40 + 1 입니다.
 
         :param instances: List which is a batch of instances
         :return: Batch object which is a batch of tensors
@@ -298,7 +300,7 @@ class WyScoutSequenceDataModule(SoccerDataModule):
 
 
 
-
+        # legacy code below
 
         # for i, instance in enumerate(instances):
         # # slice the last 40 events
