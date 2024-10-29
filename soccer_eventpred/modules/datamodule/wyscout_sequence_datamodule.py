@@ -198,7 +198,7 @@ class WyScoutSequenceDataModule(SoccerDataModule):
         '''
 
 
-        max_length=40
+        max_length=40cd
         windows_per_instance=[]
         for instance in instances:
             num_windows=max(1, len(instance.event_ids)-max_length+1)
