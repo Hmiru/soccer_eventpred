@@ -199,90 +199,49 @@ class WyScoutSequenceDataModule(SoccerDataModule):
         :return: Batch object which is a batch of tensors
         '''
 
+        MAX_LENGTH=40
+        DEFAULT_EVENT_TIME=120
+        DEFAULT_POSITION=101
 
-        max_length=40
-        windows_per_instance=[]
-        for instance in instances:
-            num_windows=max(1, len(instance.event_ids)-max_length+1)
-            windows_per_instance.append(num_windows) # number of windows for each instance
+        windows_per_instance=[
+            max(1, len(instance.event_ids)-MAX_LENGTH+1) for instance in instances
+        ]
+
         total_windows=sum(windows_per_instance)
+        print(total_windows)
         '''
         make empty tensors of size (total_windows, max_length) for each attribute
         '''
-        event_times = cast(
-            torch.LongTensor,
-            torch.full(
-                (total_windows, max_length),
-                120, dtype=torch.long),
-        )
-        team_ids = cast(
-            torch.LongTensor,
-            torch.full(
-                (total_windows, max_length),
-                self.vocab.get(PAD_TOKEN, "teams"),
-                dtype=torch.long,
-            ),
-        )
-        event_ids = cast(
-            torch.LongTensor,
-            torch.full(
-                (total_windows, max_length),
-                self.vocab.get(PAD_TOKEN, "events"),
-                dtype=torch.long,
-            ),
-        )
-        player_ids = cast(
-            torch.LongTensor,
-            torch.full(
-                (total_windows, max_length),
-                self.vocab.get(PAD_TOKEN, "players"),
-                dtype=torch.long,
-            ),
-        )
-        start_pos_x = cast(
-            torch.LongTensor,
-            torch.full((total_windows, max_length),
-                       101, dtype=torch.long),
-        )
-        start_pos_y = cast(
-            torch.LongTensor,
-            torch.full((total_windows, max_length),
-                       101, dtype=torch.long),
-        )
-        end_pos_x = cast(
-            torch.LongTensor,
-            torch.full((total_windows, max_length),
-                       101, dtype=torch.long),
-        )
-        end_pos_y = cast(
-            torch.LongTensor,
-            torch.full((total_windows, max_length),
-                       101, dtype=torch.long),
-        )
-        mask = cast(
-            torch.BoolTensor,
-            torch.zeros((total_windows, max_length),
-            dtype=torch.bool),
-        )
+        def create_tensor(fill_value, dtype=torch.long):
+            return torch.full((total_windows, MAX_LENGTH), fill_value, dtype=dtype)
+        # simple tensor creation
+        event_times = create_tensor(DEFAULT_EVENT_TIME)
+        team_ids=create_tensor(self.vocab.get(PAD_TOKEN, "teams"))
+        event_ids=create_tensor(self.vocab.get(PAD_TOKEN, "events"))
+        player_ids=create_tensor(self.vocab.get(PAD_TOKEN, "players"))
+        start_pos_x=create_tensor(DEFAULT_POSITION)
+        start_pos_y=create_tensor(DEFAULT_POSITION)
+        end_pos_x=create_tensor(DEFAULT_POSITION)
+        end_pos_y=create_tensor(DEFAULT_POSITION)
+        mask=torch.zeros((total_windows, MAX_LENGTH), dtype=torch.bool)
 
         window_idx=0
-        for instance in instances:
+        for instance_idx, instance in enumerate(instances):
             sequence_length=len(instance.event_ids) # length of the sequence
-            for start_idx in range(0, sequence_length-max_length+1):
-                end_idx = start_idx + max_length
-                '''
-                fill the tensors with the values of the current window
-                '''
-                event_times[window_idx, : max_length] = torch.tensor(instance.event_times[start_idx:end_idx], dtype=torch.long)
-                team_ids[window_idx, : max_length] = torch.tensor(instance.team_ids[start_idx:end_idx], dtype=torch.long)
-                event_ids[window_idx, : max_length] = torch.tensor(instance.event_ids[start_idx:end_idx], dtype=torch.long)
-                player_ids[window_idx, : max_length] = torch.tensor(instance.player_ids[start_idx:end_idx], dtype=torch.long)
-                start_pos_x[window_idx, : max_length] = torch.tensor(instance.start_pos_x[start_idx:end_idx], dtype=torch.long)
-                start_pos_y[window_idx, : max_length] = torch.tensor(instance.start_pos_y[start_idx:end_idx], dtype=torch.long)
-                end_pos_x[window_idx, : max_length] = torch.tensor(instance.end_pos_x[start_idx:end_idx], dtype=torch.long)
-                end_pos_y[window_idx, : max_length] = torch.tensor(instance.end_pos_y[start_idx:end_idx], dtype=torch.long)
-                mask[window_idx, : max_length] = True
-                window_idx+=1 # increment window index
+            for start_idx in range(0, sequence_length-MAX_LENGTH+1):
+                end_idx = start_idx + MAX_LENGTH
+
+                event_times[window_idx, : ] = torch.tensor(instance.event_times[start_idx:end_idx], dtype=torch.long)
+                team_ids[window_idx, : ] = torch.tensor(instance.team_ids[start_idx:end_idx], dtype=torch.long)
+                event_ids[window_idx, : ] = torch.tensor(instance.event_ids[start_idx:end_idx], dtype=torch.long)
+                player_ids[window_idx, : ] = torch.tensor(instance.player_ids[start_idx:end_idx], dtype=torch.long)
+                start_pos_x[window_idx, : ] = torch.tensor(instance.start_pos_x[start_idx:end_idx], dtype=torch.long)
+                start_pos_y[window_idx, : ] = torch.tensor(instance.start_pos_y[start_idx:end_idx], dtype=torch.long)
+                end_pos_x[window_idx, : ] = torch.tensor(instance.end_pos_x[start_idx:end_idx], dtype=torch.long)
+                end_pos_y[window_idx, : ] = torch.tensor(instance.end_pos_y[start_idx:end_idx], dtype=torch.long)
+                mask[window_idx, : ] = True
+                window_idx+=1
+
 
         return Batch(
             event_times=event_times,

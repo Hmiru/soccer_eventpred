@@ -105,8 +105,6 @@ class WyScoutSequenceEventPredictor(EventPredictor):
         )
 
     def forward(self, batch: Batch) -> Any:
-
-
         if self._player_encoder is not None:
             embeddings = self._seq2seq_encoder(
                 # last 39 events are used as input
@@ -146,6 +144,8 @@ class WyScoutSequenceEventPredictor(EventPredictor):
         return output
 
     def training_step(self, batch: Batch, batch_idx: int) -> Any:
+        batch_size=batch.event_ids.size(0)
+        print(f"Batch size: {batch_size}")
 
         output = self.forward(batch)
         # Correctly select the last event as the target
