@@ -15,9 +15,9 @@ from soccer_eventpred.util import load_json, save_as_csv, save_formatted_json
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument("--data-source", type=str, default="wyscout")
+    parser.add_argument("--data-source", type=str, default="wyscout_offense_only")
     parser.add_argument("--data-module", type=str, default="wyscout_single")
-    parser.add_argument("--data-name", type=str, default="wyscout")
+    parser.add_argument("--data-name", type=str, default="wyscout_offense_only")
     parser.add_argument(
         "-c",
         "--config",
@@ -138,9 +138,13 @@ if __name__ == "__main__":
         train_datasource=train_datasource,
         val_datasource=val_datasource,
         test_datasource=test_datasource,
-        num_workers=args.num_workers,
-        batch_size=params["batch_size"],
+
+        sequence_length=params["sequence_length"],
+        ignore_tokens = args.ignore_tokens,
         label2events=label2events,
+
+        batch_size=params["batch_size"],
+        num_workers=args.num_workers,
     )
     datamodule.prepare_data()
 
@@ -159,6 +163,7 @@ if __name__ == "__main__":
                     "type": args.class_weight_type,
                 }
             )
+
         class_weight = class_weight_fn.calculate(
             dataset=datamodule._train_dataset,
             num_classes=datamodule.vocab.size("events"),
@@ -171,6 +176,10 @@ if __name__ == "__main__":
         )
     else:
         class_weight = None
+
+    for token in args.ignore_tokens:
+        print(f"token={token}: {datamodule.vocab.get(token, namespace='events')}")
+    print(f"class_weight = {class_weight}")
 
     # loss function
     if args.loss_function == "cross_entropy_loss":
@@ -224,8 +233,10 @@ if __name__ == "__main__":
             best_checkpoint_path = list(sorted(exp_dir.glob("*.ckpt")))[-1]
             best_checkpoint = torch.load(str(best_checkpoint_path))
     model.load_state_dict(state_dict=best_checkpoint["state_dict"])
+    print(f"best_checkpoint_path = {best_checkpoint_path}")
+
     trainer = pl.Trainer(
-        accelerator="gpu", deterministic=True, enable_progress_bar=False, logger=False
+        accelerator="cpu", deterministic=True, enable_progress_bar=False, logger=False, devices=1
     )
     valid_results = trainer.validate(model, datamodule=datamodule)
     test_results = trainer.test(model, datamodule=datamodule)

@@ -19,9 +19,9 @@ logger = logging.getLogger(__name__)
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument("--data-source", type=str, default="wyscout")
+    parser.add_argument("--data-source", type=str, default="wyscout_offense_only")
     parser.add_argument("--data-module", type=str, default="wyscout_single")
-    parser.add_argument("--data-name", type=str, default="wyscout")
+    parser.add_argument("--data-name", type=str, default="wyscout_offense_only")
     parser.add_argument(
         "-c",
         "--config",
@@ -70,7 +70,6 @@ if __name__ == "__main__":
     parser.add_argument("--beta", type=float, default=0.0)
     parser.add_argument("--loss-function", type=str, default="cross_entropy_loss")
     parser.add_argument("--focal-loss-gamma", type=float, default=2.0)
-    parser.add_argument("-t", "--test-run", action="store_true")
     parser.add_argument("--val-check-interval", type=float, default=1.0)
     parser.add_argument("--ignore-tokens", type=str, default=None, nargs="+")
     parser.add_argument("--learning-rate", type=float, default=None)
@@ -95,54 +94,36 @@ if __name__ == "__main__":
     params_copy = deepcopy(params)
 
     logger.info("Loading data")
-    if args.test_run:
-        args.epochs = 1
-        train_datasource = SoccerDataSource.from_params(
-            params_={
-                "type": args.data_source,
-                "data_name": args.data_name,
-                "subset": "mini_train.jsonl",
-            }
-        )
-        val_datasource = SoccerDataSource.from_params(
-            params_={
-                "type": args.data_source,
-                "data_name": args.data_name,
-                "subset": "mini_dev.jsonl",
-            }
-        )
-        test_datasource = SoccerDataSource.from_params(
-            params_={
-                "type": args.data_source,
-                "data_name": args.data_name,
-                "subset": "mini_test.jsonl",
-            }
-        )
 
-    else:
-        train_datasource = SoccerDataSource.from_params(
-            params_={
-                "type": args.data_source,
-                "data_name": args.data_name,
-                "subset": "train.jsonl",
-            }
-        )
-        val_datasource = SoccerDataSource.from_params(
-            params_={
-                "type": args.data_source,
-                "data_name": args.data_name,
-                "subset": "dev.jsonl",
-            }
-        )
-        test_datasource = SoccerDataSource.from_params(
-            params_={
-                "type": args.data_source,
-                "data_name": args.data_name,
-                "subset": "test.jsonl",
-            }
-        )
+    # SoccerDataSource: 전처리 및 split이 완료된 데이터셋을 로드
+    # train.jsonl, dev.jsonl, test.jsonl: [competition, wyscout_match_id, wyscout_team_id_1, wyscout_team_id_2, player_list_1, player_list_2, events]
+    train_datasource = SoccerDataSource.from_params(
+        params_={
+            "type": args.data_source,
+            "data_name": args.data_name,
+            "subset": "train.jsonl",
+        }
+    )
+    val_datasource = SoccerDataSource.from_params(
+        params_={
+            "type": args.data_source,
+            "data_name": args.data_name,
+            "subset": "dev.jsonl",
+        }
+    )
+    test_datasource = SoccerDataSource.from_params(
+        params_={
+            "type": args.data_source,
+            "data_name": args.data_name,
+            "subset": "test.jsonl",
+        }
+    )
 
+    # 통합할 이벤트 Dictionary: 각 주요 이벤트(label)마다 관련된 세부 이벤트들이 그룹으로 묶여 있음
     label2events = load_json(args.mapping) if args.mapping is not None else None
+
+    # wyscout_single_event_datamodule(or WyScoutSequenceDataModule) 클래스를 인스턴스화
+    # 이 모듈은 데이터셋 로딩, 배치 구성, 이벤트 및 팀/선수 관련 vocab 빌드 기능 등을 포함.
     datamodule = SoccerDataModule.from_params(
         params_={
             "type": args.data_module,
@@ -150,10 +131,15 @@ if __name__ == "__main__":
         train_datasource=train_datasource,
         val_datasource=val_datasource,
         test_datasource=test_datasource,
-        num_workers=args.num_workers,
-        batch_size=params["batch_size"],
+
+        sequence_length=params["sequence_length"],
+        ignore_tokens = args.ignore_tokens,
         label2events=label2events,
+
+        batch_size=params["batch_size"],
+        num_workers=args.num_workers,
     )
+
     logger.info("Preparing datamodule...")
     datamodule.build_vocab()
 
@@ -186,6 +172,10 @@ if __name__ == "__main__":
     else:
         class_weight = None
 
+    for token in args.ignore_tokens:
+        print(f"token={token}: {datamodule.vocab.get(token, namespace='events')}")
+    print(f"class_weight = {class_weight}")
+    
     # loss function
     if args.loss_function == "cross_entropy_loss":
         loss_function = {
@@ -207,11 +197,14 @@ if __name__ == "__main__":
             "type": args.prediction_method,
             "seq2vec_encoder": params["seq2vec_encoder"],
         }
-    else:
+    elif args.prediction_method == "sequence":
         model_config = {
             "type": args.prediction_method,
             "seq2seq_encoder": params["seq2seq_encoder"],
         }
+    else:
+        raise ValueError(f"Invalid model: {args.prediction_method}")
+
     model = EventPredictor.from_params(
         params_=model_config,
         time_encoder=params["time_encoder"],
@@ -225,6 +218,7 @@ if __name__ == "__main__":
         player_encoder=params["player_encoder"] if "player_encoder" in params else None,
         scheduler=params["scheduler"] if "scheduler" in params else None,
         class_weight=class_weight,
+        ignore_tokens= args.ignore_tokens
     )
     output_dir = OUTPUT_DIR / args.name
     chackpoint_callback = pl.callbacks.ModelCheckpoint(
@@ -235,7 +229,7 @@ if __name__ == "__main__":
     )
     early_stopping_callback = pl.callbacks.EarlyStopping(
         monitor="valid_loss",
-        patience=5,
+        patience=10,
         mode="min",
         min_delta=0.0001,
     )
