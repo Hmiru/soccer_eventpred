@@ -104,6 +104,7 @@ class ClassWeightExponential(ClassWeightBase):
             ) / sum_exponentials
 
         # ignore_indices
+        # 'CoP' tokens, indicating a change in possession, were given zero weight in the loss function
         if ignore_indices is not None:
             for ignore_idx in ignore_indices:
                 class_weights[ignore_idx] = 0

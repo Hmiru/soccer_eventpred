@@ -20,7 +20,7 @@ class Embedding(TokenEmbedder):
         self.embedding = nn.Embedding(
             num_embeddings=num_embeddings,
             embedding_dim=embedding_dim,
-            padding_idx=padding_idx,
+            padding_idx=padding_idx, # padding_iudx에 대한 임베딩 벡터에 대해서는 훈련시 파라미터 업데이트가 되지 않음 -> 임베딩 벡터가 0으로 유지
             max_norm=max_norm,
             norm_type=norm_type,
             scale_grad_by_freq=False,

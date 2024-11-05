@@ -105,8 +105,12 @@ class WyScoutSingleEventDataModule(SoccerDataModule):
             event_sequences = self._train_datasource.collect()
         for event_sequence in event_sequences:
             for event in event_sequence.events:
-                self.vocab.add(event.team_name, "teams")
-                self.vocab.add(event.player_name, "players")
+                # event.team_name 값이 None일 경우 무시
+                if event.team_name is not None:
+                    self.vocab.add(event.team_name, "teams") 
+                # event.player_name 값이 None일 경우 무시
+                if event.player_name is not None:
+                    self.vocab.add(event.player_name, "players")
                 if self._event2label is not None:
                     event_id = self.vocab.add(
                         self._event2label[event.comb_event_name], "events"
@@ -124,7 +128,8 @@ class WyScoutSingleEventDataModule(SoccerDataModule):
     def _prepare_instance(self, event_sequence):
         event_times = [event.scaled_event_time for event in event_sequence.events]
         team_ids = [
-            self.vocab.get(event.team_name, "teams") for event in event_sequence.events
+            self.vocab.get(event.team_name, "teams") if event.team_name is not None else self.vocab.get(UNK_TOKEN, "teams") # team_name이 None일 때 UNK_TOKEN으로 처리
+            for event in event_sequence.events
         ]
         start_pos_x = [event.start_pos_x for event in event_sequence.events]
         start_pos_y = [event.start_pos_y for event in event_sequence.events]
@@ -142,7 +147,7 @@ class WyScoutSingleEventDataModule(SoccerDataModule):
             ]
 
         player_ids = [
-            self.vocab.get(event.player_name, "players")
+            self.vocab.get(event.player_name, "players") if event.team_name is not None else self.vocab.get(UNK_TOKEN, "players")  # player_name이 None일 때 UNK_TOKEN으로 처리
             for event in event_sequence.events
         ]
         return Instance(
@@ -196,6 +201,7 @@ class WyScoutSingleEventDataModule(SoccerDataModule):
         )
 
     def batch_collator(self, instances: List[Instance]) -> SingleEventBatch:
+
         max_length = max(len(instance.event_ids) for instance in instances)
         event_times = cast(
             torch.LongTensor,
@@ -251,6 +257,7 @@ class WyScoutSingleEventDataModule(SoccerDataModule):
         )
 
         for i, instance in enumerate(instances):
+
             event_times[i, : len(instance.event_times)] = torch.tensor(
                 instance.event_times, dtype=torch.long
             )
