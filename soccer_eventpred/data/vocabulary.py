@@ -6,14 +6,10 @@ PAD_TOKEN = "[PAD]"
 
 
 class Vocabulary:
-    def __init__(
-        self,
-        token2index: Optional[Dict[str, Dict[str, int]]] = None,
-        add_unk_token: bool = True,
-        add_pad_token: bool = True,
-    ) -> None:
+    def __init__(self,token2index: Optional[Dict[str, Dict[str, int]]] = None) -> None:
         self._token2index: Dict[str, Dict[str, int]] = defaultdict(dict)
         self._index2token: Dict[str, Dict[int, str]] = defaultdict(dict)
+
         if token2index is not None:
             for namespace in token2index:
                 self._token2index[namespace] = {
@@ -43,3 +39,7 @@ class Vocabulary:
 
     def size(self, namespace: str = "tokens") -> int:
         return len(self._token2index[namespace])
+
+    def get_namespace_tokens(self, namespace: str = "tokens") -> list[str]:
+        """특정 네임스페이스의 모든 토큰을 반환합니다."""
+        return list(self._token2index[namespace].keys())

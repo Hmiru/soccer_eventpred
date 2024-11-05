@@ -19,7 +19,9 @@ class WyScoutEvent:
     player_name: str
     tags: List[str]
 
-
+    def __len__(self) -> int:
+        return len(self.match_period)
+    
 @dataclass
 class WyScoutEventSequence:
     competition: str
@@ -30,27 +32,9 @@ class WyScoutEventSequence:
     wyscout_team_id_2: Optional[int] = None
     player_list_2: Optional[List[str]] = None
 
-
-@dataclass
-class JLeagueEvent:
-    match_period: str
-    event_time_period: float
-    event_time: float
-    scaled_event_time: int
-    team_name: str
-    event_name: str
-    start_pos_x: int
-    start_pos_y: int
-    player_name: str
-
-
-@dataclass
-class JLeagueEventSequence:
-    match_id: int
-    team_index: int
-    events: List[WyScoutEvent]
-
-
+    def __len__(self) -> int:
+        return len(self.competition)
+    
 @dataclass
 class Batch:
     event_times: torch.LongTensor
@@ -63,7 +47,9 @@ class Batch:
     end_pos_x: Optional[torch.LongTensor] = None
     end_pos_y: Optional[torch.LongTensor] = None
 
-
+    def __len__(self) -> int:
+        return len(self.event_times)
+    
 @dataclass
 class Instance:
     event_times: List[int]
@@ -75,7 +61,9 @@ class Instance:
     end_pos_x: Optional[List[int]] = None
     end_pos_y: Optional[List[int]] = None
 
-
+    def __len__(self) -> int:
+        return len(self.event_times)
+    
 @dataclass
 class Prediction:
     event_times: List[int]
@@ -87,7 +75,9 @@ class Prediction:
     end_pos_x: Optional[List[int]] = None
     end_pos_y: Optional[List[int]] = None
 
-
+    def __len__(self) -> int:
+        return len(self.event_times)
+    
 @dataclass
 class SingleEventBatch:
     event_times: torch.LongTensor
@@ -101,7 +91,9 @@ class SingleEventBatch:
     end_pos_x: Optional[torch.LongTensor] = None
     end_pos_y: Optional[torch.LongTensor] = None
 
-
+    def __len__(self) -> int:
+        return len(self.event_times)
+    
 @dataclass
 class SingleEventPrediction:
     event_times: List[int]
@@ -112,3 +104,7 @@ class SingleEventPrediction:
     start_pos_y: List[int]
     end_pos_x: Optional[List[int]] = None
     end_pos_y: Optional[List[int]] = None
+
+    def __len__(self) -> int:
+        return len(self.event_times)
+    

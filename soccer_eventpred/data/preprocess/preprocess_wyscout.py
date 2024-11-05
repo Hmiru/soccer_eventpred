@@ -27,12 +27,15 @@ DEFENSIVE_COMB_EVENTS = [
     "Foul_Time lost foul",
     "Foul_Violent Foul",
     "Offside_",
+    "Goalkeeper leaving line_Goalkeeper leaving line",
+    "Save attempt_Reflexes",
+    "Save attempt_Save attempt"
 ]
 
 
 def preprocess_wyscout_teams_data(
-    input_path: Path | str = DATA_DIR / "wyscout/raw/mappings/teams.json",
-    output_path: Path | str = DATA_DIR / "wyscout/preprocessed/mappings/id2team.json",
+    input_path: Path | str = DATA_DIR / "wyscout_offense_only/raw/mappings/teams.json",
+    output_path: Path | str = DATA_DIR / "wyscout_offense_only/preprocessed/mappings/id2team.json",
 ) -> None:
     data = load_json(input_path)
     output = {}
@@ -43,8 +46,8 @@ def preprocess_wyscout_teams_data(
 
 
 def preprocess_wyscout_players_data(
-    input_path: Path | str = DATA_DIR / "wyscout/raw/mappings/players.json",
-    output_path: Path | str = DATA_DIR / "wyscout/preprocessed/mappings/id2player.json",
+    input_path: Path | str = DATA_DIR / "wyscout_offense_only/raw/mappings/players.json",
+    output_path: Path | str = DATA_DIR / "wyscout_offense_only/preprocessed/mappings/id2player.json",
 ) -> None:
     data = load_json(input_path)
     output = {}
@@ -59,9 +62,9 @@ def preprocess_wyscout_players_data(
 
 
 def preprocess_wyscout_tags_data(
-    input_path: Path | str = DATA_DIR / "wyscout/raw/mappings/tags2name.csv",
+    input_path: Path | str = DATA_DIR / "wyscout_offense_only/raw/mappings/tags2name.csv",
     output_path: Path
-    | str = DATA_DIR / "wyscout/preprocessed/mappings/tagid2name.json",
+    | str = DATA_DIR / "wyscout_offense_only/preprocessed/mappings/tagid2name.json",
 ) -> None:
     data = pd.read_csv(input_path)
     data.rename(
@@ -76,9 +79,9 @@ def preprocess_wyscout_tags_data(
 
 
 def preprocess_wyscout_events_data(
-    input_dir: Path | str = DATA_DIR / "wyscout/raw/events",
-    output_dir: Path | str = DATA_DIR / "wyscout/preprocessed/events",
-    mappings_dir: Path | str = DATA_DIR / "wyscout/preprocessed/mappings",
+    input_dir: Path | str = DATA_DIR / "wyscout_offense_only/raw/events",
+    output_dir: Path | str = DATA_DIR / "wyscout_offense_only/preprocessed/events",
+    mappings_dir: Path | str = DATA_DIR / "wyscout_offense_only/preprocessed/mappings",
     targets: List[str] = ["events_Spain.json"],
     offense_only: bool = True,
 ) -> None:
@@ -280,14 +283,71 @@ def preprocess_wyscout_events_data(
     df = df.query('match_period != "P"')
     if offense_only:
         df = df.query("comb_event_name not in @DEFENSIVE_COMB_EVENTS")
+        df=insert_change_possession_events(df)
+    # else:
+    #     df = df.query("comb_event_name not in @DEFENSIVE_COMB_EVENTS")
+    #
+
     df.to_pickle(output_dir / "all_preprocessed.pkl")
     return None
+
+def insert_change_possession_events(df: pd.DataFrame) -> pd.DataFrame:
+    df = df.copy()
+    df = df.reset_index(drop=True)
+    df.loc[:, 'changed'] = df['wyscout_team_id'] != df['wyscout_team_id'].shift(1)
+
+    df.loc[0, 'changed'] = False  # 첫 번째 행은 변화를 감지하지 않도록 설정
+    change_indices = df[df['changed']].index.tolist()
+    new_rows = []
+    prev_index = 0
+
+
+    for index in change_indices:
+
+        new_rows.append(df.iloc[prev_index:index])
+
+        # 'change_poss' 생성
+        new_row = pd.DataFrame({
+            'competition': [df.loc[prev_index, 'competition']],
+            'wyscout_match_id': [df.loc[prev_index, 'wyscout_match_id']],
+            'match_period': [df.loc[prev_index, 'match_period']],
+            'event_time_period': [df.loc[prev_index, 'event_time_period']] if pd.notna(
+                df.loc[prev_index, 'event_time_period']) else [0],
+            'event_time': [df.loc[prev_index, 'event_time']] if pd.notna(df.loc[prev_index, 'event_time']) else [0],
+            'scaled_event_time': [df.loc[prev_index, 'scaled_event_time']] if pd.notna(
+                df.loc[prev_index, 'scaled_event_time']) else [0],
+            'wyscout_team_id': [df.loc[prev_index, 'wyscout_team_id']] if pd.notna(
+                df.loc[prev_index, 'wyscout_team_id']) else [0],
+            'team_name': ['no_team'],
+            'comb_event_name': ['change_poss'],  # This is fixed as per the requirement
+            'start_pos_x': [df.loc[prev_index, 'end_pos_x']] if pd.notna(df.loc[prev_index, 'end_pos_x']) else [0],
+            'start_pos_y': [df.loc[prev_index, 'end_pos_y']] if pd.notna(df.loc[prev_index, 'end_pos_y']) else [0],
+            'end_pos_x': [df.loc[prev_index, 'end_pos_x']] if pd.notna(df.loc[prev_index, 'end_pos_x']) else [0],
+            'end_pos_y': [df.loc[prev_index, 'end_pos_y']] if pd.notna(df.loc[prev_index, 'end_pos_y']) else [0],
+            'wyscout_player_id': [df.loc[prev_index, 'wyscout_player_id']] if pd.notna(
+                df.loc[prev_index, 'wyscout_player_id']) else [0],
+            'player_name':['no_player'],
+            'tags': [None]  # Assuming tags can remain None
+        })
+
+        # 새로운 'change_poss' 행 추가
+        new_rows.append(new_row)
+
+        # 인덱스 업데이트
+        prev_index = index
+    new_rows.append(df.iloc[prev_index:])
+
+    df_final = pd.concat(new_rows, ignore_index=True)
+    df_final = df_final.drop(columns=['changed'], errors='ignore')
+
+    return df_final
+
 
 
 def split_wyscout_data(
     df_pickle_path: Path
-    | str = DATA_DIR / "wyscout/preprocessed/events/all_preprocessed.pkl",
-    output_dir: Path | str = DATA_DIR / "wyscout/preprocessed/events",
+    | str = DATA_DIR / "wyscout_offense_only/preprocessed/events/all_preprocessed.pkl",
+    output_dir: Path | str = DATA_DIR / "wyscout_offense_only/preprocessed/events",
     random_state: int = 42,
 ) -> None:
     output_dir = Path(output_dir)
@@ -299,13 +359,13 @@ def split_wyscout_data(
         match2teams,
         test_size=0.2,
         random_state=random_state,
-        stratify=match2teams["team_name"],
+        #stratify=match2teams["team_name"],
     )
     dev_match, test_match = train_test_split(
         dev_test_match,
         test_size=0.5,
         random_state=random_state,
-        stratify=dev_test_match["team_name"],
+        #stratify=dev_test_match["team_name"],
     )
 
     train_match_ids = list(train_match["wyscout_match_id"].unique())
@@ -343,7 +403,9 @@ def split_wyscout_data(
             team_ids = list(match["wyscout_team_id"].unique())
             match_id = match["wyscout_match_id"].unique()[0]
             team_id1 = team_ids[0]
-            team_id2 = team_ids[1]
+            team_id2 = team_ids[1] if len(team_ids) > 1 else None  # 수정된 부분
+            if team_id2 is None:
+                team_id2 = 0  # None일 경우 0으로 설정
             player_list1 = list(
                 match.query("wyscout_team_id == @team_id1")["player_name"].unique()
             )
@@ -376,7 +438,7 @@ def split_wyscout_data(
 
 
 def load_wyscout_data(
-    input_dir: Path | str = DATA_DIR / "wyscout/raw/events",
+    input_dir: Path | str = DATA_DIR / "wyscout_offense_only/raw/events",
     targets: List[str] = ["events_Spain.json"],
 ) -> pd.DataFrame:
     data_paths = sorted(Path(input_dir).glob("*.json"))
