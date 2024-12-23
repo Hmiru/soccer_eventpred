@@ -16,6 +16,10 @@ class WyScoutDataSource(SoccerDataSource):
         self._build_data()
 
     def _build_data(self):
+        # _datasource: train/dev/test에 저장된 preprecess data
+        # data: 경기정보
+        # len(self._data): 총 경기수
+        # self._data = [{competition:EPL,...}, {competition: LaLiga..}, ..., {competition: K-league}]
         for data in self._datasource:
             events = [WyScoutEvent(**event) for event in data.pop("events")]
             self._data.append(

@@ -53,15 +53,17 @@ class JLeagueEventSequence:
 
 @dataclass
 class Batch:
+    mask: torch.BoolTensor  # 기본값 없는 필드가 먼저 와야 함
     event_times: torch.LongTensor
     team_ids: torch.LongTensor
     event_ids: torch.LongTensor
     player_ids: torch.LongTensor
     start_pos_x: torch.LongTensor
     start_pos_y: torch.LongTensor
-    mask: torch.BoolTensor
     end_pos_x: Optional[torch.LongTensor] = None
     end_pos_y: Optional[torch.LongTensor] = None
+    labels: torch.Tensor = None  # 기본값 있는 필드는 뒤로 이동
+    
 
 
 @dataclass

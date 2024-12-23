@@ -25,6 +25,8 @@ class FocalLoss(LossFunction):
         self.ignore_index = ignore_index
         self.reduction = reduction
         self.ignore_index
+        # 특정정 클래스(target)을 손실 계산에서 제외하는 역할 
+        # 모델이 예측한 결과와 정답 레이블 사이의 손실을 계산할 때, ignore_index로 설정된 값은 무시되어 그 값에 대해 손실이 계산되지 않음
         self.ce_loss = nn.CrossEntropyLoss(
             weight=self.weight, ignore_index=self.ignore_index, reduction="none"
         )
