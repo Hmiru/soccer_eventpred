@@ -62,7 +62,7 @@ class GruSeq2SeqEncoder(PytorchSeq2SeqWrapper):
             hidden_size=hidden_size,
             num_layers=num_layers,
             bias=bias,
-            batch_first=True,
+            batch_first=True, # if True, (bs, seq, feature)
             dropout=dropout,
             bidirectional=bidirectional,
         )

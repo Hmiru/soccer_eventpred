@@ -8,6 +8,7 @@ from soccer_eventpred.modules.datamodule.soccer_datamodule import SoccerDataModu
 from soccer_eventpred.modules.datamodule.soccer_dataset import SoccerEventDataset
 
 
+
 @SoccerDataModule.register("wyscout_sequence")
 class WyScoutSequenceDataModule(SoccerDataModule):
     def __init__(
@@ -167,6 +168,7 @@ class WyScoutSequenceDataModule(SoccerDataModule):
     def build_dataloader(
         self, dataset, batch_size=None, shuffle=False, num_workers=0
     ) -> torch.utils.data.DataLoader:
+        print(f"Building dataloader for dataset: {dataset}")  # 데이터셋 종류 출력
         return torch.utils.data.DataLoader(
             dataset=dataset,
             batch_size=batch_size or self.batch_size,
@@ -191,57 +193,75 @@ class WyScoutSequenceDataModule(SoccerDataModule):
         )
 
     def batch_collator(self, instances: List[Instance]) -> Batch:
-        '''
-        입력으로 받은 instances에서 각 instance에 대해, step size가 1인 슬라이딩 윈도우 기법을 사용하여 최대 40개의 이벤트 시퀀스를 추출합니다. 
-        각 `instance` 내에서 생성되는 윈도우의 개수는 window_size = len(instance) - 40 + 1 입니다.
+        MAX_LENGTH = 40
+        DEFAULT_EVENT_TIME = 120
+        DEFAULT_POSITION = 101
+        TARGET_EVENT_IDS = {0, 1, 3, 7}  # 마스킹할 이벤트 ID 집합
 
-        :param instances: List which is a batch of instances
-        :return: Batch object which is a batch of tensors
-        '''
-
-        MAX_LENGTH=40
-        DEFAULT_EVENT_TIME=120
-        DEFAULT_POSITION=101
-
-        windows_per_instance=[
-            max(1, len(instance.event_ids)-MAX_LENGTH+1) for instance in instances
+        windows_per_instance = [
+            max(1, len(instance.event_ids) - MAX_LENGTH + 1) for instance in instances
         ]
+        total_windows = sum(windows_per_instance)
 
-        total_windows=sum(windows_per_instance)
-        print(total_windows)
-        '''
-        make empty tensors of size (total_windows, max_length) for each attribute
-        '''
         def create_tensor(fill_value, dtype=torch.long):
             return torch.full((total_windows, MAX_LENGTH), fill_value, dtype=dtype)
-        # simple tensor creation
-        event_times = create_tensor(DEFAULT_EVENT_TIME)
-        team_ids=create_tensor(self.vocab.get(PAD_TOKEN, "teams"))
-        event_ids=create_tensor(self.vocab.get(PAD_TOKEN, "events"))
-        player_ids=create_tensor(self.vocab.get(PAD_TOKEN, "players"))
-        start_pos_x=create_tensor(DEFAULT_POSITION)
-        start_pos_y=create_tensor(DEFAULT_POSITION)
-        end_pos_x=create_tensor(DEFAULT_POSITION)
-        end_pos_y=create_tensor(DEFAULT_POSITION)
-        mask=torch.zeros((total_windows, MAX_LENGTH), dtype=torch.bool)
 
-        window_idx=0
+        event_times = create_tensor(DEFAULT_EVENT_TIME)
+        team_ids = create_tensor(self.vocab.get(PAD_TOKEN, "teams"))
+        event_ids = create_tensor(self.vocab.get(PAD_TOKEN, "events"))
+        player_ids = create_tensor(self.vocab.get(PAD_TOKEN, "players"))
+        start_pos_x = create_tensor(DEFAULT_POSITION)
+        start_pos_y = create_tensor(DEFAULT_POSITION)
+        end_pos_x = create_tensor(DEFAULT_POSITION)
+        end_pos_y = create_tensor(DEFAULT_POSITION)
+        mask = torch.zeros((total_windows, MAX_LENGTH), dtype=torch.bool)
+
+        labels = torch.full((total_windows,), self.vocab.get(PAD_TOKEN, "events"), dtype=torch.long)
+
+        window_idx = 0
+        print(f"Total instances received: {len(instances)}")
         for instance_idx, instance in enumerate(instances):
-            sequence_length=len(instance.event_ids) # length of the sequence
-            for start_idx in range(0, sequence_length-MAX_LENGTH+1):
+            sequence_length = len(instance.event_ids)
+            if sequence_length < MAX_LENGTH:
+                print(f"Instance {instance_idx} is too short for sliding window. Skipping...")
+                continue
+
+            for start_idx in range(sequence_length - MAX_LENGTH + 1):
                 end_idx = start_idx + MAX_LENGTH
 
-                event_times[window_idx, : ] = torch.tensor(instance.event_times[start_idx:end_idx], dtype=torch.long)
-                team_ids[window_idx, : ] = torch.tensor(instance.team_ids[start_idx:end_idx], dtype=torch.long)
-                event_ids[window_idx, : ] = torch.tensor(instance.event_ids[start_idx:end_idx], dtype=torch.long)
-                player_ids[window_idx, : ] = torch.tensor(instance.player_ids[start_idx:end_idx], dtype=torch.long)
-                start_pos_x[window_idx, : ] = torch.tensor(instance.start_pos_x[start_idx:end_idx], dtype=torch.long)
-                start_pos_y[window_idx, : ] = torch.tensor(instance.start_pos_y[start_idx:end_idx], dtype=torch.long)
-                end_pos_x[window_idx, : ] = torch.tensor(instance.end_pos_x[start_idx:end_idx], dtype=torch.long)
-                end_pos_y[window_idx, : ] = torch.tensor(instance.end_pos_y[start_idx:end_idx], dtype=torch.long)
-                mask[window_idx, : ] = True
-                window_idx+=1
+                #print(f"Window {window_idx}: Start index = {start_idx}, End index = {end_idx}")
+                if end_idx > len(instance.event_ids):
+                    print(f"Skipping invalid end_idx {end_idx} for instance {instance_idx}")
+                    continue
 
+                event_times[window_idx, :] = torch.tensor(instance.event_times[start_idx:end_idx], dtype=torch.long)
+                team_ids[window_idx, :] = torch.tensor(instance.team_ids[start_idx:end_idx], dtype=torch.long)
+                event_ids[window_idx, :] = torch.tensor(instance.event_ids[start_idx:end_idx], dtype=torch.long)
+                player_ids[window_idx, :] = torch.tensor(instance.player_ids[start_idx:end_idx], dtype=torch.long)
+                start_pos_x[window_idx, :] = torch.tensor(instance.start_pos_x[start_idx:end_idx], dtype=torch.long)
+                start_pos_y[window_idx, :] = torch.tensor(instance.start_pos_y[start_idx:end_idx], dtype=torch.long)
+                end_pos_x[window_idx, :] = torch.tensor(instance.end_pos_x[start_idx:end_idx], dtype=torch.long)
+                end_pos_y[window_idx, :] = torch.tensor(instance.end_pos_y[start_idx:end_idx], dtype=torch.long)
+                labels[window_idx] = instance.event_ids[end_idx - 1]
+
+                #print(f"Labels[{window_idx}] = {labels[window_idx]}")
+
+                if labels[window_idx] is None:
+                    raise ValueError(f"Labels are None for window_idx {window_idx}")
+
+                if event_ids[window_idx, -1] in TARGET_EVENT_IDS:
+                    continue
+
+                mask[window_idx, :] = True
+                window_idx += 1
+        print(f"Total windows created: {window_idx}")
+        print(f"event_times shape: {event_times.shape}")
+        print(f"labels shape: {labels.shape}")
+        print(f"mask shape: {mask.shape}")
+        assert event_times.shape[0] == total_windows
+        assert labels.shape[0] == total_windows
+        assert mask.shape[0] == total_windows
+        print("Batch created successfully with total windows:", total_windows)
 
         return Batch(
             event_times=event_times,
@@ -253,7 +273,9 @@ class WyScoutSequenceDataModule(SoccerDataModule):
             end_pos_x=end_pos_x,
             end_pos_y=end_pos_y,
             mask=mask,
+            labels=labels,
         )
+
 
 
 

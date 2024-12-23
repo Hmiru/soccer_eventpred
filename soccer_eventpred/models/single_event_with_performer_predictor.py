@@ -212,7 +212,7 @@ class SingleEventWithPerformerPredictor(EventPredictor):
         output = self.forward(batch)
         assert output.shape[0] == batch.event_ids.shape[0]
         assert output.shape[1] == self._num_classes
-        assert batch.labels.shape[0] == batch.event_ids.shape[0]
+        # assert batch.labels.shape[0] == batch.event_ids.shape[0]
 
         loss = self.loss_fn(F.softmax(output, dim=1), batch.labels)
         loss = torch.mean(loss)

@@ -6,14 +6,10 @@ PAD_TOKEN = "[PAD]"
 
 
 class Vocabulary:
-    def __init__(
-        self,
-        token2index: Optional[Dict[str, Dict[str, int]]] = None,
-        add_unk_token: bool = True,
-        add_pad_token: bool = True,
-    ) -> None:
+    def __init__(self,token2index: Optional[Dict[str, Dict[str, int]]] = None) -> None:
         self._token2index: Dict[str, Dict[str, int]] = defaultdict(dict)
         self._index2token: Dict[str, Dict[int, str]] = defaultdict(dict)
+
         if token2index is not None:
             for namespace in token2index:
                 self._token2index[namespace] = {
