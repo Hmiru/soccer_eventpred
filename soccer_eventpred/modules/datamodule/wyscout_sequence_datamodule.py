@@ -120,6 +120,7 @@ class WyScoutSequenceDataModule(SoccerDataModule):
         self.event_counts = [
             elem[1] for elem in sorted(self.event_counts.items(), key=lambda x: x[0])
         ]
+        print("Vocabulary built successfully.")
 
     def _prepare_instance(self, match):
         event_times = [event.scaled_event_time for event in match.events]
