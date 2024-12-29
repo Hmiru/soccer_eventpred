@@ -49,7 +49,7 @@ local seq2seq_input_dim = time_encoder_dim + team_encoder_dim + event_encoder_di
     },
     "optimizer": {
         "type": "torch::AdamW",
-        "lr": 1e-4,
+        "lr": 1e-5,
     },
     "scheduler": {
         "type": "torch.optim.lr_scheduler.LinearLR",

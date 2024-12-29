@@ -229,7 +229,7 @@ if __name__ == "__main__":
     )
     early_stopping_callback = pl.callbacks.EarlyStopping(
         monitor="valid_loss",
-        patience=10,
+        patience=20,
         mode="min",
         min_delta=0.0001,
     )
