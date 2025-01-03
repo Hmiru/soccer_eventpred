@@ -30,12 +30,12 @@ class PytorchTransformerEncoder(Seq2SeqEncoder):
 
     def __init__(
         self,
-        input_dim: int,
+        input_size: int,
         num_layers: int,
-        feedforward_hidden_dim: int = 2048,
-        num_attention_heads: int = 8,
+        feedforward_hidden_dim: int = 512,
+        num_attention_heads: int = 4,
         positional_encoding: Optional[str] = None,
-        positional_embedding_size: int = 512,
+        positional_embedding_size: int = 128,
         dropout_prob: float = 0.1,
         activation: str = "relu",
         auto_regressive: bool = False,
@@ -43,14 +43,14 @@ class PytorchTransformerEncoder(Seq2SeqEncoder):
         super().__init__()
 
         layer = nn.TransformerEncoderLayer(
-            d_model=input_dim,
+            d_model=input_size,
             nhead=num_attention_heads,
             dim_feedforward=feedforward_hidden_dim,
             dropout=dropout_prob,
             activation=activation,
         )
         self._transformer = nn.TransformerEncoder(layer, num_layers)
-        self._input_dim = input_dim
+        self._input_dim = input_size
         self._num_heads = num_attention_heads
         self._auto_regressive = auto_regressive
 
@@ -69,7 +69,7 @@ class PytorchTransformerEncoder(Seq2SeqEncoder):
         elif positional_encoding == "embedding":
             self._sinusoidal_positional_encoding = False
             self._positional_embedding = nn.Embedding(
-                positional_embedding_size, input_dim
+                positional_embedding_size, input_size
             )
         else:
             raise ValueError(
