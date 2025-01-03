@@ -7,7 +7,7 @@ import pandas as pd
 
 
 def load_json(path: Union[Path, str]) -> Dict:
-    with open(path, "r") as f:
+    with open(path, "r", encoding='utf-8') as f:
         data = json.load(f)
     return data
 
