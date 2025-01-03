@@ -60,10 +60,10 @@ if __name__ == "__main__":
         "--accelerator", type=str, default="gpu", help="accelerator to use for training"
     )
     parser.add_argument(
-        "--epochs", type=int, default=20, help="number of epochs to train for"
+        "--epochs", type=int, default=50, help="number of epochs to train for"
     )
     parser.add_argument(
-        "--num-workers", type=int, default=16, help="number of workers for dataloader"
+        "--num-workers", type=int, default=8, help="number of workers for dataloader"
     )
     parser.add_argument("-g", "--gradient-accumulation-steps", type=int, default=1)
     parser.add_argument("--class-weight-type", type=str, default=None)
@@ -175,7 +175,7 @@ if __name__ == "__main__":
     for token in args.ignore_tokens:
         print(f"token={token}: {datamodule.vocab.get(token, namespace='events')}")
     print(f"class_weight = {class_weight}")
-    
+
     # loss function
     if args.loss_function == "cross_entropy_loss":
         loss_function = {
@@ -231,7 +231,7 @@ if __name__ == "__main__":
         monitor="valid_loss",
         patience=20,
         mode="min",
-        min_delta=0.0001,
+        min_delta=1e-10,
     )
     mlflow_logger = pl.loggers.MLFlowLogger(
         experiment_name=args.exp_name,

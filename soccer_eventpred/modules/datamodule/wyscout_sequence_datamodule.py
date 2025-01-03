@@ -197,7 +197,7 @@ class WyScoutSequenceDataModule(SoccerDataModule):
         MAX_LENGTH = 40
         DEFAULT_EVENT_TIME = 120
         DEFAULT_POSITION = 101
-        TARGET_EVENT_IDS = {0, 1, 3, 7}  # 마스킹할 이벤트 ID 집합
+        TARGET_EVENT_IDS = {0, 1, 4, 7}  # 마스킹할 이벤트 ID 집합
 
         windows_per_instance = [
             max(1, len(instance.event_ids) - MAX_LENGTH + 1) for instance in instances
@@ -255,14 +255,14 @@ class WyScoutSequenceDataModule(SoccerDataModule):
 
                 mask[window_idx, :] = True
                 window_idx += 1
-        print(f"Total windows created: {window_idx}")
-        print(f"event_times shape: {event_times.shape}")
-        print(f"labels shape: {labels.shape}")
-        print(f"mask shape: {mask.shape}")
+        #print(f"Total windows created: {window_idx}")
+        #print(f"event_times shape: {event_times.shape}")
+        #print(f"labels shape: {labels.shape}")
+        #print(f"mask shape: {mask.shape}")
         assert event_times.shape[0] == total_windows
         assert labels.shape[0] == total_windows
         assert mask.shape[0] == total_windows
-        print("Batch created successfully with total windows:", total_windows)
+        # print("Batch created successfully with total windows:", total_windows)
 
         return Batch(
             event_times=event_times,
@@ -276,8 +276,6 @@ class WyScoutSequenceDataModule(SoccerDataModule):
             mask=mask,
             labels=labels,
         )
-
-
 
 
 

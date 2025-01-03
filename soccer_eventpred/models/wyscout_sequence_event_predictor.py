@@ -116,58 +116,50 @@ class WyScoutSequenceEventPredictor(EventPredictor):
         )
 
     def forward(self, batch: Batch) -> Any:
-        inputs=torch.cat(
-                    (
-                        self._time_encoder(batch.event_times[:, :-1]),#all events except the last one
-                        self._team_encoder(batch.team_ids[:, :-1]),
-                        self._event_encoder(batch.event_ids[:, :-1]),
-                        self._player_encoder(batch.player_ids[:, :-1]),
-                        self._x_axis_encoder(batch.start_pos_x[:, :-1]),
-                        self._y_axis_encoder(batch.start_pos_y[:, :-1]),
-                        self._x_axis_encoder(batch.end_pos_x[:, :-1]),
-                        self._y_axis_encoder(batch.end_pos_y[:, :-1]),
-                    ),
-                    dim=2, #concatenate along the last dimension; embedding dim
-                )
+        
+        event_masked = torch.tensor(batch.event_ids)
+        event_masked[:, -1] = self._datamodule.vocab.get(PAD_TOKEN, namespace="events")
 
         if self._player_encoder is not None:
             # embeddings: bs x seq x embed_dim
+            
             embeddings = self._seq2seq_encoder(
                 # last 39 events are used as input
                 # inputs: bs x seq x all_features(8x10)
+                
                 inputs=torch.cat(
                     (
-                        self._time_encoder(batch.event_times[:, :-1]),#all events except the last one
-                        self._team_encoder(batch.team_ids[:, :-1]),
-                        self._event_encoder(batch.event_ids[:, :-1]),
-                        self._player_encoder(batch.player_ids[:, :-1]),
-                        self._x_axis_encoder(batch.start_pos_x[:, :-1]),
-                        self._y_axis_encoder(batch.start_pos_y[:, :-1]),
-                        self._x_axis_encoder(batch.end_pos_x[:, :-1]),
-                        self._y_axis_encoder(batch.end_pos_y[:, :-1]),
+                        self._time_encoder(batch.event_times),#all events except the last one
+                        self._team_encoder(batch.team_ids),
+                        self._event_encoder(event_masked),
+                        self._player_encoder(batch.player_ids),
+                        self._x_axis_encoder(batch.start_pos_x),
+                        self._y_axis_encoder(batch.start_pos_y),
+                        self._x_axis_encoder(batch.end_pos_x),
+                        self._y_axis_encoder(batch.end_pos_y),
                     ),
                     dim=2, #concatenate along the last dimension; embedding dim
                 ),
-                mask=batch.mask[:, :-1],
+                mask=batch.mask,
             )
         else:
             embeddings = self._seq2seq_encoder(
                 inputs=torch.cat(
                     (
-                        self._time_encoder(batch.event_times[:, :-1]),
-                        self._team_encoder(batch.team_ids[:, :-1]),
-                        self._event_encoder(batch.event_ids[:, :-1]),
-                        self._x_axis_encoder(batch.start_pos_x[:, :-1]),
-                        self._y_axis_encoder(batch.start_pos_y[:, :-1]),
-                        self._x_axis_encoder(batch.end_pos_x[:, :-1]),
-                        self._y_axis_encoder(batch.end_pos_y[:, :-1]),
+                        self._time_encoder(batch.event_times),
+                        self._team_encoder(batch.team_ids),
+                        self._event_encoder(event_masked),
+                        self._x_axis_encoder(batch.start_pos_x),
+                        self._y_axis_encoder(batch.start_pos_y),
+                        self._x_axis_encoder(batch.end_pos_x),
+                        self._y_axis_encoder(batch.end_pos_y),
                     ),
                     dim=2,#same as above
                 ),
-                mask=batch.mask[:, :-1],#mask for all events except the last one
+                mask=batch.mask,#mask for all events except the last one
             )
 
-        embeddings = torch.tanh(embeddings) # bs x seq x embed_dim -> bs x seq x embed_dim
+        embeddings = torch.relu(embeddings) # bs x seq x embed_dim -> bs x seq x embed_dim
         output = self._event_projection(embeddings) # s x seq x embed_dim - > bs x seq x vocab_size(이벤트 총 개수)
         return output
 

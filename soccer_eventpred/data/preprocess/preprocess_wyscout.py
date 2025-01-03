@@ -32,6 +32,7 @@ DEFENSIVE_COMB_EVENTS = [
     "Save attempt_Save attempt"
 ]
 
+
 def preprocess_wyscout_teams_data(
     input_path: Path | str = DATA_DIR / "wyscout_offense_only/raw/mappings/teams.json",
     output_path: Path | str = DATA_DIR / "wyscout_offense_only/preprocessed/mappings/id2team.json",
@@ -129,34 +130,21 @@ def preprocess_wyscout_events_data(
     df = df.drop("positions", axis=1)
 
     # fill none and -1
-    for i in tqdm(range(len(df)), total=len(df)):
-        if df.loc[i, "end_pos_y"] is None or df.loc[i, "end_pos_y"] == "-1":
-            df.loc[i, "end_pos_y"] = (
-                df.loc[i, "start_pos_y"]
-                if df.loc[i, "eventName"] == "Foul"
-                else df.loc[i + 1, "start_pos_y"]
-            )
+    for i, row in tqdm(df.iterrows(), total=len(df), desc="preprocessing event data"):
+        if row["end_pos_y"] is None or row["end_pos_y"] == "-1":
+            df.at[i, "end_pos_y"] = row["start_pos_y"] if row["eventName"] == "Foul" else df.at[i + 1, "start_pos_y"]
 
-        if df.loc[i, "end_pos_x"] is None or df.loc[i, "end_pos_x"] == "-1":
-            df.loc[i, "end_pos_x"] = (
-                df.loc[i, "start_pos_x"]
-                if df.loc[i, "eventName"] == "Foul"
-                else df.loc[i + 1, "start_pos_x"]
-            )
+        if row["end_pos_x"] is None or row["end_pos_x"] == "-1":
+            df.at[i, "end_pos_x"] = row["start_pos_x"] if row["eventName"] == "Foul"else df.at[i + 1, "start_pos_x"]
 
-        if df.loc[i, "start_pos_y"] is None or df.loc[i, "start_pos_y"] == "-1":
-            df.loc[i, "start_pos_y"] = (
-                df.loc[i, "end_pos_y"]
-                if df.loc[i, "eventName"] == "Foul"
-                else df.loc[i - 1, "end_pos_y"]
-            )
 
-        if df.loc[i, "start_pos_x"] is None or df.loc[i, "start_pos_x"] == "-1":
-            df.loc[i, "start_pos_x"] = (
-                df.loc[i, "end_pos_x"]
-                if df.loc[i, "eventName"] == "Foul"
-                else df.loc[i - 1, "end_pos_x"]
-            )
+        if row["start_pos_y"] is None or row["start_pos_y"] == "-1":
+            df.at[i, "start_pos_y"] = row["end_pos_y"] if row["eventName"] == "Foul" else df.at[i - 1, "end_pos_y"]
+            
+
+        if row["start_pos_x"] is None or row["start_pos_x"] == "-1":
+            df.at[i, "start_pos_x"] = row["end_pos_x"] if row["eventName"] == "Foul" else df.at[i - 1, "end_pos_x"]
+
     df[["start_pos_x", "start_pos_y", "end_pos_x", "end_pos_y"]] = df[
         ["start_pos_x", "start_pos_y", "end_pos_x", "end_pos_y"]
     ].astype(int)
@@ -280,109 +268,58 @@ def preprocess_wyscout_events_data(
         ]
     ]
     df = df.query('match_period != "P"')
+    
     if offense_only:
         df = df.query("comb_event_name not in @DEFENSIVE_COMB_EVENTS")
-        df=reorder(df)
-    # else:
-    #     df = df.query("comb_event_name not in @DEFENSIVE_COMB_EVENTS")
-    #
+        df=insert_change_possession_events(df)
+    else:
+        df = df.query("comb_event_name not in @DEFENSIVE_COMB_EVENTS")
+    
 
     df.to_pickle(output_dir / "all_preprocessed.pkl")
     return None
-def reorder(df: pd.DataFrame)->pd.DataFrame:
-
-    df_with_cop = insert_change_possession_events(df)
-
-    reordered_data = []
-    
-    # 각 경기에 대해 처리
-    for match_id in tqdm(df_with_cop["wyscout_match_id"].unique(), desc="Processing Matches"):
-        # 해당 경기 데이터 추출
-        match_data = df_with_cop[df_with_cop["wyscout_match_id"] == match_id]
-        
-        # 팀 이름 추출
-        teams = [team for team in match_data["team_name"].unique() if team != "no_team"]
-        if len(teams) != 2:
-            raise ValueError(f"경기 {match_id}에 팀이 2개가 아닙니다: {teams}")
-        
-        # A 팀과 B 팀 데이터 분리 + COP 토큰 포함
-        team_a_df = match_data[
-            (match_data["team_name"] == teams[0]) | (match_data["comb_event_name"] == "change_poss")
-        ].reset_index(drop=True)
-
-        team_b_df = match_data[
-            (match_data["team_name"] == teams[1]) | (match_data["comb_event_name"] == "change_poss")
-        ].reset_index(drop=True)
-
-        # COP 토큰 중복 제거
-        team_a_df = team_a_df[
-            ~(team_a_df["comb_event_name"].duplicated(keep="first") & (team_a_df["comb_event_name"] == "change_poss"))
-        ]
-
-        team_b_df = team_b_df[
-            ~(team_b_df["comb_event_name"].duplicated(keep="first") & (team_b_df["comb_event_name"] == "change_poss"))
-        ]
-
-       # A 팀 -> B 팀 순서로 정렬
-        reordered_data.extend(team_a_df.to_dict(orient="records"))
-        reordered_data.extend(team_b_df.to_dict(orient="records"))
-
-    # 6. 최종 데이터프레임으로 변환
-    reordered_df = pd.DataFrame(reordered_data)
-    return reordered_df
 
 def insert_change_possession_events(df: pd.DataFrame) -> pd.DataFrame:
-    df = df.copy()
-    df = df.reset_index(drop=True)
+    df = df.copy().reset_index(drop=True)
     df.loc[:, 'changed'] = df['wyscout_team_id'] != df['wyscout_team_id'].shift(1)
 
     df.loc[0, 'changed'] = False  # 첫 번째 행은 변화를 감지하지 않도록 설정
     change_indices = df[df['changed']].index.tolist()
+
     new_rows = []
-    prev_index = 0
+    for cop_index in tqdm(change_indices, desc="insert Cop Token"):
+        last_index = cop_index-1
 
+        row = df.loc[last_index]
 
-    for index in tqdm(change_indices, desc="Inserting COP events"):
-
-        new_rows.append(df.iloc[prev_index:index])
-
-        # 'change_poss' 생성
-        new_row = pd.DataFrame({
-            'competition': [df.loc[prev_index, 'competition']],
-            'wyscout_match_id': [df.loc[prev_index, 'wyscout_match_id']],
-            'match_period': [df.loc[prev_index, 'match_period']],
-            'event_time_period': [df.loc[prev_index, 'event_time_period']] if pd.notna(
-                df.loc[prev_index, 'event_time_period']) else [0],
-            'event_time': [df.loc[prev_index, 'event_time']] if pd.notna(df.loc[prev_index, 'event_time']) else [0],
-            'scaled_event_time': [df.loc[prev_index, 'scaled_event_time']] if pd.notna(
-                df.loc[prev_index, 'scaled_event_time']) else [0],
-            'wyscout_team_id': [df.loc[prev_index, 'wyscout_team_id']] if pd.notna(
-                df.loc[prev_index, 'wyscout_team_id']) else [0],
-            'team_name': ['no_team'],
-            'comb_event_name': ['change_poss'],  # This is fixed as per the requirement
-            'start_pos_x': [df.loc[prev_index, 'end_pos_x']] if pd.notna(df.loc[prev_index, 'end_pos_x']) else [0],
-            'start_pos_y': [df.loc[prev_index, 'end_pos_y']] if pd.notna(df.loc[prev_index, 'end_pos_y']) else [0],
-            'end_pos_x': [df.loc[prev_index, 'end_pos_x']] if pd.notna(df.loc[prev_index, 'end_pos_x']) else [0],
-            'end_pos_y': [df.loc[prev_index, 'end_pos_y']] if pd.notna(df.loc[prev_index, 'end_pos_y']) else [0],
-            'wyscout_player_id': [df.loc[prev_index, 'wyscout_player_id']] if pd.notna(
-                df.loc[prev_index, 'wyscout_player_id']) else [0],
-            'player_name':['no_player'],
-            'tags': [None]  # Assuming tags can remain None
+        # Insert Cop Token
+        new_rows.append({
+            'competition': row['competition'],
+            'wyscout_match_id': row['wyscout_match_id'],
+            'match_period': row['match_period'],
+            'event_time_period': row['event_time_period'] if pd.notna(row['event_time_period']) else '[UNK]',
+            'event_time': row['event_time'] if pd.notna(row['event_time']) + 1e-3 else '[UNK]',
+            'scaled_event_time': row['scaled_event_time'] if pd.notna(row['scaled_event_time']) else '[UNK]',
+            'wyscout_team_id': row['wyscout_team_id'] if pd.notna(row['wyscout_team_id']) else '[UNK]',
+            'team_name': '[UNK]',
+            'comb_event_name': 'change_poss',  # This is fixed as per the requirement
+            'start_pos_x': row['end_pos_x'] if pd.notna(row['end_pos_x']) else '[UNK]',
+            'start_pos_y': row['end_pos_y'] if pd.notna(row['end_pos_y']) else '[UNK]',
+            'end_pos_x': row['end_pos_x'] if pd.notna(row['end_pos_x']) else '[UNK]',
+            'end_pos_y': row['end_pos_y'] if pd.notna(row['end_pos_y']) else '[UNK]',
+            'wyscout_player_id': row['wyscout_player_id'] if pd.notna(row['wyscout_player_id']) else '[UNK]',
+            'player_name': '[UNK]',
+            'tags': ['[UNK]']  # Assuming tags can remain None
         })
 
-        # 새로운 'change_poss' 행 추가
-        new_rows.append(new_row)
+    # 새 행을 데이터프레임으로 변환
+    cop_df = pd.DataFrame(new_rows)
 
-        # 인덱스 업데이트
-        prev_index = index
-    new_rows.append(df.iloc[prev_index:])
-
-    df_final = pd.concat(new_rows, ignore_index=True)
+    # 기존 데이터와 병합
+    df_final = pd.concat([df, cop_df]).sort_values("event_time", kind='merge').reset_index(drop=True)
     df_final = df_final.drop(columns=['changed'], errors='ignore')
-
+    
     return df_final
-
-
 
 def split_wyscout_data(
     df_pickle_path: Path
