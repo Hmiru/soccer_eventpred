@@ -1,20 +1,19 @@
-local time_encoder_dim = 10;
-local team_encoder_dim = 10;
-local event_encoder_dim = 10;
+local time_encoder_dim = 32;
+local team_encoder_dim = 32;
+local event_encoder_dim = 32;
 local player_encoder_dim = 32;
-local x_axis_encoder_dim = 10;
-local y_axis_encoder_dim = 10;
+local x_axis_encoder_dim = 32;
+local y_axis_encoder_dim = 32;
 local seq2seq_input_dim = time_encoder_dim + team_encoder_dim + event_encoder_dim + player_encoder_dim + x_axis_encoder_dim * 2 + y_axis_encoder_dim * 2;
 
 
 
 {
     "seq2seq_encoder": {
-        "type": "lstm",
+        "type": "pytorch_transformer_encoder",
         "input_size": seq2seq_input_dim,
         "hidden_size": 128,
-        "num_layers": 1,
-        "bidirectional": true,
+        "num_layers": 4,
     },
     "time_encoder": {
         "type": "embedding",
