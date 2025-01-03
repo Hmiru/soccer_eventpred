@@ -32,7 +32,6 @@ DEFENSIVE_COMB_EVENTS = [
     "Save attempt_Save attempt"
 ]
 
-
 def preprocess_wyscout_teams_data(
     input_path: Path | str = DATA_DIR / "wyscout_offense_only/raw/mappings/teams.json",
     output_path: Path | str = DATA_DIR / "wyscout_offense_only/preprocessed/mappings/id2team.json",
@@ -283,13 +282,54 @@ def preprocess_wyscout_events_data(
     df = df.query('match_period != "P"')
     if offense_only:
         df = df.query("comb_event_name not in @DEFENSIVE_COMB_EVENTS")
-        df=insert_change_possession_events(df)
+        df=reorder(df)
     # else:
     #     df = df.query("comb_event_name not in @DEFENSIVE_COMB_EVENTS")
     #
 
     df.to_pickle(output_dir / "all_preprocessed.pkl")
     return None
+def reorder(df: pd.DataFrame)->pd.DataFrame:
+
+    df_with_cop = insert_change_possession_events(df)
+
+    reordered_data = []
+    
+    # 각 경기에 대해 처리
+    for match_id in tqdm(df_with_cop["wyscout_match_id"].unique(), desc="Processing Matches"):
+        # 해당 경기 데이터 추출
+        match_data = df_with_cop[df_with_cop["wyscout_match_id"] == match_id]
+        
+        # 팀 이름 추출
+        teams = [team for team in match_data["team_name"].unique() if team != "no_team"]
+        if len(teams) != 2:
+            raise ValueError(f"경기 {match_id}에 팀이 2개가 아닙니다: {teams}")
+        
+        # A 팀과 B 팀 데이터 분리 + COP 토큰 포함
+        team_a_df = match_data[
+            (match_data["team_name"] == teams[0]) | (match_data["comb_event_name"] == "change_poss")
+        ].reset_index(drop=True)
+
+        team_b_df = match_data[
+            (match_data["team_name"] == teams[1]) | (match_data["comb_event_name"] == "change_poss")
+        ].reset_index(drop=True)
+
+        # COP 토큰 중복 제거
+        team_a_df = team_a_df[
+            ~(team_a_df["comb_event_name"].duplicated(keep="first") & (team_a_df["comb_event_name"] == "change_poss"))
+        ]
+
+        team_b_df = team_b_df[
+            ~(team_b_df["comb_event_name"].duplicated(keep="first") & (team_b_df["comb_event_name"] == "change_poss"))
+        ]
+
+       # A 팀 -> B 팀 순서로 정렬
+        reordered_data.extend(team_a_df.to_dict(orient="records"))
+        reordered_data.extend(team_b_df.to_dict(orient="records"))
+
+    # 6. 최종 데이터프레임으로 변환
+    reordered_df = pd.DataFrame(reordered_data)
+    return reordered_df
 
 def insert_change_possession_events(df: pd.DataFrame) -> pd.DataFrame:
     df = df.copy()
@@ -302,7 +342,7 @@ def insert_change_possession_events(df: pd.DataFrame) -> pd.DataFrame:
     prev_index = 0
 
 
-    for index in change_indices:
+    for index in tqdm(change_indices, desc="Inserting COP events"):
 
         new_rows.append(df.iloc[prev_index:index])
 
