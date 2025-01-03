@@ -31,25 +31,6 @@ class WyScoutEventSequence:
     player_list_2: Optional[List[str]] = None
 
 
-@dataclass
-class JLeagueEvent:
-    match_period: str
-    event_time_period: float
-    event_time: float
-    scaled_event_time: int
-    team_name: str
-    event_name: str
-    start_pos_x: int
-    start_pos_y: int
-    player_name: str
-
-
-@dataclass
-class JLeagueEventSequence:
-    match_id: int
-    team_index: int
-    events: List[WyScoutEvent]
-
 
 @dataclass
 class Batch:
@@ -60,6 +41,7 @@ class Batch:
     start_pos_x: torch.LongTensor
     start_pos_y: torch.LongTensor
     mask: torch.BoolTensor
+    labels: torch.LongTensor
     end_pos_x: Optional[torch.LongTensor] = None
     end_pos_y: Optional[torch.LongTensor] = None
 

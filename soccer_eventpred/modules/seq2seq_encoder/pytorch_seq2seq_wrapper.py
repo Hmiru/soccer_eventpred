@@ -30,8 +30,9 @@ class PytorchSeq2SeqWrapper(Seq2SeqEncoder):
         return cast(int, self._module.hidden_size) * self._num_directions
 
     def forward(self, inputs: torch.Tensor, mask: torch.BoolTensor) -> torch.Tensor:
-        batch_size, max_length, _ = inputs.size()
+        batch_size, max_length, _ = inputs.size() # bs x seq x embed_dim
         lengths = mask.sum(dim=1).cpu()
+
         packed_sequence = pack_padded_sequence(
             inputs, lengths, batch_first=True, enforce_sorted=False
         )

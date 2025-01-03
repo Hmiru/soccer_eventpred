@@ -18,10 +18,11 @@ class WyScoutSingleEventDataModule(SoccerDataModule):
         val_datasource=None,
         test_datasource=None,
         batch_size=32,
-        num_workers=0,
+        num_workers=8,
         label2events: Optional[Dict[str, List[str]]] = None,
         vocab: Optional[Vocabulary] = None,
     ):
+
         super().__init__()
         self._train_dataset = SoccerEventDataset()
         self._val_dataset = SoccerEventDataset() if val_datasource else None

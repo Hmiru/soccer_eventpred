@@ -8,3 +8,6 @@ from soccer_eventpred.models.wyscout_sequence_event_predictor import (
 from soccer_eventpred.models.wyscout_single_event_predictor import (
     WyScoutSingleEventPredictor,
 )  # noqa: F401
+from soccer_eventpred.models.wyscout_event_predictor import (
+    WyScoutEventPredictor,
+)  # noqa: F401

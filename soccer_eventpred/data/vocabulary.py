@@ -28,6 +28,7 @@ class Vocabulary:
             index = len(self._token2index[namespace])
             self._token2index[namespace][token] = index
             self._index2token[namespace][index] = token
+        
         return self.get(token, namespace)
 
     def get(

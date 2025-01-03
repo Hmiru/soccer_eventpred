@@ -5,4 +5,7 @@ from soccer_eventpred.modules.datamodule.wyscout_sequence_datamodule import (
 from soccer_eventpred.modules.datamodule.wyscout_single_event_datamodule import (
     WyScoutSingleEventDataModule,
 )
+from soccer_eventpred.modules.datamodule.wyscout_datamodule import (
+    WyScoutDataModule,
+)
 

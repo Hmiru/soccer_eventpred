@@ -63,14 +63,13 @@ if __name__ == "__main__":
         "--epochs", type=int, default=20, help="number of epochs to train for"
     )
     parser.add_argument(
-        "--num-workers", type=int, default=16, help="number of workers for dataloader"
+        "--num-workers", type=int, default=8, help="number of workers for dataloader"
     )
     parser.add_argument("-g", "--gradient-accumulation-steps", type=int, default=1)
     parser.add_argument("--class-weight-type", type=str, default=None)
     parser.add_argument("--beta", type=float, default=0.0)
     parser.add_argument("--loss-function", type=str, default="cross_entropy_loss")
     parser.add_argument("--focal-loss-gamma", type=float, default=2.0)
-    parser.add_argument("-t", "--test-run", action="store_true")
     parser.add_argument("--val-check-interval", type=float, default=1.0)
     parser.add_argument("--ignore-tokens", type=str, default=None, nargs="+")
     parser.add_argument("--learning-rate", type=float, default=None)
@@ -95,56 +94,33 @@ if __name__ == "__main__":
     params_copy = deepcopy(params)
 
     logger.info("Loading data")
-    if args.test_run:
-        print("Test run")
-        args.epochs = 1
-        train_datasource = SoccerDataSource.from_params(
-            params_={
-                "type": args.data_source,
-                "data_name": args.data_name,
-                "subset": "mini_train.jsonl",
-            }
-        )
-        val_datasource = SoccerDataSource.from_params(
-            params_={
-                "type": args.data_source,
-                "data_name": args.data_name,
-                "subset": "mini_dev.jsonl",
-            }
-        )
-        test_datasource = SoccerDataSource.from_params(
-            params_={
-                "type": args.data_source,
-                "data_name": args.data_name,
-                "subset": "mini_test.jsonl",
-            }
-        )
-
-    else:
-
-        train_datasource = SoccerDataSource.from_params(
-            params_={
-                "type": args.data_source,
-                "data_name": args.data_name,
-                "subset": "train.jsonl",
-            }
-        )
-        val_datasource = SoccerDataSource.from_params(
-            params_={
-                "type": args.data_source,
-                "data_name": args.data_name,
-                "subset": "dev.jsonl",
-            }
-        )
-        test_datasource = SoccerDataSource.from_params(
-            params_={
-                "type": args.data_source,
-                "data_name": args.data_name,
-                "subset": "test.jsonl",
-            }
-        )
+    train_datasource = SoccerDataSource.from_params(
+        params_={
+            "type": args.data_source,
+            "data_name": args.data_name,
+            "subset": "train.jsonl",
+        }
+    )
+    val_datasource = SoccerDataSource.from_params(
+        params_={
+            "type": args.data_source,
+            "data_name": args.data_name,
+            "subset": "dev.jsonl",
+        }
+    )
+    test_datasource = SoccerDataSource.from_params(
+        params_={
+            "type": args.data_source,
+            "data_name": args.data_name,
+            "subset": "test.jsonl",
+        }
+    )
 
     label2events = load_json(args.mapping) if args.mapping is not None else None
+
+    # WyScoutSequenceDataModule
+    # 이벤트데이터를 활용하여 instance생성(action, team, time, pos, player_id의 쌍)
+    # player_id, team_id
     datamodule = SoccerDataModule.from_params(
         params_={
             "type": args.data_module,
@@ -158,17 +134,18 @@ if __name__ == "__main__":
     )
 
     train_loader = datamodule._train_dataset
-    batch_size = datamodule.batch_size
+    batch_size = datamodule._val_dataset
     train_loader_size = len(train_loader)
 
-
-
-
     logger.info("Preparing datamodule...")
+    # 각 id에 매핑되는 Token번호 매핑
+    print("ignore tokens: ", args.ignore_tokens)
     datamodule.build_vocab()
 
-
-
+    # '[UNK]': 0, '[PAD]': 1, 'Pass': 2, 'Cop': 3, 'Dribble': 4, 'Shot': 5, 'Cross': 6, 'Goal': 7
+    for token in args.ignore_tokens:
+        print(f"{token}: {datamodule.vocab.get(token, namespace='events')}개")
+    
     logger.info("Calculating class weights...")
     if args.class_weight_type is not None:
         if args.class_weight_type == "exponential":
@@ -219,25 +196,32 @@ if __name__ == "__main__":
             "type": args.prediction_method,
             "seq2vec_encoder": params["seq2vec_encoder"],
         }
+    elif args.prediction_method == "predictor":
+        model_config = {
+            "type": args.prediction_method,
+            "encoder": params["encoder"],
+        }
     else:
         model_config = {
             "type": args.prediction_method,
             "seq2seq_encoder": params["seq2seq_encoder"],
         }
+
     model = EventPredictor.from_params(
         params_=model_config,
-        time_encoder=params["time_encoder"],
-        team_encoder=params["team_encoder"],
-        event_encoder=params["event_encoder"],
-        x_axis_encoder=params["x_axis_encoder"],
-        y_axis_encoder=params["y_axis_encoder"],
+        time_embedding=params["time_embedding"],
+        team_embedding=params["team_embedding"],
+        event_embedding=params["event_embedding"],
+        x_axis_embedding=params["x_axis_embedding"],
+        y_axis_embedding=params["y_axis_embedding"],
         datamodule=datamodule,
         optimizer=params["optimizer"],
         loss_function=loss_function,
-        player_encoder=params["player_encoder"] if "player_encoder" in params else None,
+        player_embedding=params["player_embedding"] if "player_embedding" in params else None,
         scheduler=params["scheduler"] if "scheduler" in params else None,
         class_weight=class_weight,
     )
+
     output_dir = OUTPUT_DIR / args.name
     chackpoint_callback = pl.callbacks.ModelCheckpoint(
         monitor="valid_loss",
@@ -269,4 +253,5 @@ if __name__ == "__main__":
         val_check_interval=args.val_check_interval,
         detect_anomaly=True,
     )
+
     trainer.fit(model, datamodule=datamodule)

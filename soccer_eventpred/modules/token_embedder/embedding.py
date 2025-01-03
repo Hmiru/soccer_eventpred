@@ -17,6 +17,7 @@ class Embedding(TokenEmbedder):
         _weight: torch.FloatTensor = None,
     ) -> None:
         super().__init__()
+
         self.embedding = nn.Embedding(
             num_embeddings=num_embeddings,
             embedding_dim=embedding_dim,

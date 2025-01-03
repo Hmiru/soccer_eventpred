@@ -82,52 +82,28 @@ if __name__ == "__main__":
         )
     else:
         params = json.loads(evaluate_file(str(args.config)))
-    if args.test_run:
-        args.epochs = 1
-        train_datasource = SoccerDataSource.from_params(
-            params_={
-                "type": args.data_source,
-                "data_name": args.data_name,
-                "subset": "mini_train.jsonl",
-            }
-        )
-        val_datasource = SoccerDataSource.from_params(
-            params_={
-                "type": args.data_source,
-                "data_name": args.data_name,
-                "subset": "mini_dev.jsonl",
-            }
-        )
-        test_datasource = SoccerDataSource.from_params(
-            params_={
-                "type": args.data_source,
-                "data_name": args.data_name,
-                "subset": "mini_test.jsonl",
-            }
-        )
 
-    else:
-        train_datasource = SoccerDataSource.from_params(
-            params_={
-                "type": args.data_source,
-                "data_name": args.data_name,
-                "subset": "train.jsonl",
-            }
-        )
-        val_datasource = SoccerDataSource.from_params(
-            params_={
-                "type": args.data_source,
-                "data_name": args.data_name,
-                "subset": "dev.jsonl",
-            }
-        )
-        test_datasource = SoccerDataSource.from_params(
-            params_={
-                "type": args.data_source,
-                "data_name": args.data_name,
-                "subset": "test.jsonl",
-            }
-        )
+    train_datasource = SoccerDataSource.from_params(
+        params_={
+            "type": args.data_source,
+            "data_name": args.data_name,
+            "subset": "train.jsonl",
+        }
+    )
+    val_datasource = SoccerDataSource.from_params(
+        params_={
+            "type": args.data_source,
+            "data_name": args.data_name,
+            "subset": "dev.jsonl",
+        }
+    )
+    test_datasource = SoccerDataSource.from_params(
+        params_={
+            "type": args.data_source,
+            "data_name": args.data_name,
+            "subset": "test.jsonl",
+        }
+    )
 
     label2events = load_json(args.mapping) if args.mapping is not None else None
 
@@ -193,6 +169,11 @@ if __name__ == "__main__":
             "type": args.prediction_method,
             "seq2vec_encoder": params["seq2vec_encoder"],
         }
+    elif args.prediction_method == "predictor":
+        model_config = {
+            "type": args.prediction_method,
+            "encoder": params["encoder"],
+        }
     else:
         model_config = {
             "type": args.prediction_method,
@@ -201,15 +182,15 @@ if __name__ == "__main__":
 
     model = EventPredictor.from_params(
         params_=model_config,
-        time_encoder=params["time_encoder"],
-        team_encoder=params["team_encoder"],
-        event_encoder=params["event_encoder"],
-        x_axis_encoder=params["x_axis_encoder"],
-        y_axis_encoder=params["y_axis_encoder"],
+        time_embedding=params["time_embedding"],
+        team_embedding=params["team_embedding"],
+        event_embedding=params["event_embedding"],
+        x_axis_embedding=params["x_axis_embedding"],
+        y_axis_embedding=params["y_axis_embedding"],
         datamodule=datamodule,
         optimizer=params["optimizer"],
         loss_function=loss_function,
-        player_encoder=params["player_encoder"] if "player_encoder" in params else None,
+        player_embedding=params["player_embedding"] if "player_embedding" in params else None,
         scheduler=params["scheduler"] if "scheduler" in params else None,
         class_weight=class_weight,
     )
