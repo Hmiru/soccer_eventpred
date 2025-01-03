@@ -35,27 +35,27 @@ A large part of the event preprocessing code is borrowed from [seq2Event](https:
 
 ```
 poetry run python scripts/preprocess_data.py teams \
-    --input_path data/wyscout_offense_only/raw/mappings/teams.json \
-    --output_path data/wyscout_offense_only/preprocessed/mappings/id2team.json
+    --input_path soccer_eventpred/data/wyscout_offense_only/raw/mappings/teams.json \
+    --output_path soccer_eventpred/data/wyscout_offense_only/preprocessed/mappings/id2team.json
 
 poetry run python scripts/preprocess_data.py players \
-    --input_path data/wyscout_offense_only/raw/mappings/players.json \
-    --output_path data/wyscout_offense_only/preprocessed/mappings/id2player.json
+    --input_path soccer_eventpred/data/wyscout_offense_only/raw/mappings/players.json \
+    --output_path soccer_eventpred/data/wyscout_offense_only/preprocessed/mappings/id2player.json
 
 poetry run python scripts/preprocess_data.py tags \
-    --input_path data/wyscout_offense_only/raw/mappings/tags2name.csv \
-    --output_path data/wyscout_offense_only/preprocessed/mappings/tagid2name.json
+    --input_path soccer_eventpred/data/wyscout_offense_only/raw/mappings/tags2name.csv \
+    --output_path soccer_eventpred/data/wyscout_offense_only/preprocessed/mappings/tagid2name.json
 
 poetry run python scripts/preprocess_data.py events \
-    --input_dir data/wyscout_offense_only/raw/events \
-    --output_dir data/wyscout_offense_only/preprocessed/events \
-    --mappings_dir data/wyscout_offense_only/preprocessed/mappings \
+    --input_dir soccer_eventpred/data/wyscout_offense_only/raw/events \
+    --output_dir soccer_eventpred/data/wyscout_offense_only/preprocessed/events \
+    --mappings_dir soccer_eventpred/data/wyscout_offense_only/preprocessed/mappings \
     --targets "events_Spain.json" \
     --offense_only true
 
 poetry run python scripts/preprocess_data.py split \
-    --df_pickle_path data/wyscout_offense_only/preprocessed/events/all_preprocessed.pkl \
-    --output_dir data/wyscout_offense_only/preprocessed/events \
+    --df_pickle_path soccer_eventpred/data/wyscout_offense_only/preprocessed/events/all_preprocessed.pkl \
+    --output_dir soccer_eventpred/data/wyscout_offense_only/preprocessed/events \
     --random_state 42
 ```
 
@@ -63,24 +63,23 @@ poetry run python scripts/preprocess_data.py split \
 
 ```
 python ../scripts/train.py --data-name "wyscout_offense_only" \
---config ../configs/sequence_model.jsonnet \
+--config ../configs/seq2seq.jsonnet \
 --mapping ../configs/label2events_seq2event_offense_only.json \
 --exp-name "test" \
---name "LaLiga_sequence_all_ignored" --epochs 20 --gradient-accumulation-steps 4 \
+--name "LaLiga_sequence_all_ignored" --epochs 50 --gradient-accumulation-steps 1 \
 --class-weight-type "exponential" \
 --beta 0.9 --accelerator "gpu" \
 --data-module "wyscout_sequence" --devices 1 \
 --prediction-method "sequence" \
 --strategy "auto" \
---ignore-tokens "Change of possession" "Goal" "[UNK]" "[PAD]" 
-
+--ignore-tokens "Change of possession" "Goal" "[UNK]" "[PAD]"
 ```
 
 ## Evaluation
 
 ```
 python ../scripts/evaluate.py --data-name "wyscout_offense_only" \
---config ../configs/sequence_model.jsonnet \
+--config ../configs/seq2seq.jsonnet \
 --mapping ../configs/label2events_seq2event_offense_only.json \
 --run-name "LaLiga_sequence_all_ignored" --class-weight-type "exponential" \
 --beta 0.9 --data-module "wyscout_sequence" \
