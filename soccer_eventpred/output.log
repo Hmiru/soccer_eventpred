@@ -1,0 +1,374 @@
+INFO:__main__:Loading data
+INFO:__main__:Preparing datamodule...
+INFO:__main__:Preparing data...
+INFO:__main__:Training dataset size: 304
+INFO:__main__:Validation dataset size: 38
+INFO:__main__:Test dataset size: 38
+INFO:__main__:Calculating class weights...
+INFO:__main__:Training XGBoost model...
+Vocabulary built successfully.
+token=Change of possession: 4
+token=Goal: 7
+token=[UNK]: 0
+token=[PAD]: 1
+class_weight = None
+Building dataloader for dataset: <soccer_eventpred.modules.datamodule.soccer_dataset.SoccerEventDataset object at 0x7f82470e1ae0>
+Total instances received: 16
+Total instances received: 16
+Total instances received: 16
+Total instances received: 16
+Total instances received: 16
+Total instances received: 16
+Total instances received: 16
+Total instances received: 16
+Total instances received: 16
+Total instances received: 16
+Total instances received: 16
+Total instances received: 16
+Total instances received: 16
+Total instances received: 16
+Total instances received: 16
+Total instances received: 16
+Total instances received: 16
+Total instances received: 16
+Total instances received: 16
+Batch shape debug:
+event_times: torch.Size([24203, 40])
+team_ids: torch.Size([24203, 40])
+event_ids: torch.Size([24203, 40])
+player_ids: torch.Size([24203, 40])
+start_pos_x: torch.Size([24203, 40])
+start_pos_y: torch.Size([24203, 40])
+end_pos_x: torch.Size([24203, 40])
+end_pos_y: torch.Size([24203, 40])
+Batch shape debug:
+event_times: torch.Size([24130, 40])
+team_ids: torch.Size([24130, 40])
+event_ids: torch.Size([24130, 40])
+player_ids: torch.Size([24130, 40])
+start_pos_x: torch.Size([24130, 40])
+start_pos_y: torch.Size([24130, 40])
+end_pos_x: torch.Size([24130, 40])
+end_pos_y: torch.Size([24130, 40])
+Batch shape debug:
+event_times: torch.Size([24603, 40])
+team_ids: torch.Size([24603, 40])
+event_ids: torch.Size([24603, 40])
+player_ids: torch.Size([24603, 40])
+start_pos_x: torch.Size([24603, 40])
+start_pos_y: torch.Size([24603, 40])
+end_pos_x: torch.Size([24603, 40])
+end_pos_y: torch.Size([24603, 40])
+Batch shape debug:
+event_times: torch.Size([24032, 40])
+team_ids: torch.Size([24032, 40])
+event_ids: torch.Size([24032, 40])
+player_ids: torch.Size([24032, 40])
+start_pos_x: torch.Size([24032, 40])
+start_pos_y: torch.Size([24032, 40])
+end_pos_x: torch.Size([24032, 40])
+end_pos_y: torch.Size([24032, 40])
+Batch shape debug:
+event_times: torch.Size([24452, 40])
+team_ids: torch.Size([24452, 40])
+event_ids: torch.Size([24452, 40])
+player_ids: torch.Size([24452, 40])
+start_pos_x: torch.Size([24452, 40])
+start_pos_y: torch.Size([24452, 40])
+end_pos_x: torch.Size([24452, 40])
+end_pos_y: torch.Size([24452, 40])
+Batch shape debug:
+event_times: torch.Size([24227, 40])
+team_ids: torch.Size([24227, 40])
+event_ids: torch.Size([24227, 40])
+player_ids: torch.Size([24227, 40])
+start_pos_x: torch.Size([24227, 40])
+start_pos_y: torch.Size([24227, 40])
+end_pos_x: torch.Size([24227, 40])
+end_pos_y: torch.Size([24227, 40])
+Batch shape debug:
+event_times: torch.Size([24217, 40])
+team_ids: torch.Size([24217, 40])
+event_ids: torch.Size([24217, 40])
+player_ids: torch.Size([24217, 40])
+start_pos_x: torch.Size([24217, 40])
+start_pos_y: torch.Size([24217, 40])
+end_pos_x: torch.Size([24217, 40])
+end_pos_y: torch.Size([24217, 40])
+Batch shape debug:
+event_times: torch.Size([24424, 40])
+team_ids: torch.Size([24424, 40])
+event_ids: torch.Size([24424, 40])
+player_ids: torch.Size([24424, 40])
+start_pos_x: torch.Size([24424, 40])
+start_pos_y: torch.Size([24424, 40])
+end_pos_x: torch.Size([24424, 40])
+end_pos_y: torch.Size([24424, 40])
+Batch shape debug:
+event_times: torch.Size([24022, 40])
+team_ids: torch.Size([24022, 40])
+event_ids: torch.Size([24022, 40])
+player_ids: torch.Size([24022, 40])
+start_pos_x: torch.Size([24022, 40])
+start_pos_y: torch.Size([24022, 40])
+end_pos_x: torch.Size([24022, 40])
+end_pos_y: torch.Size([24022, 40])
+Batch shape debug:
+event_times: torch.Size([24432, 40])
+team_ids: torch.Size([24432, 40])
+event_ids: torch.Size([24432, 40])
+player_ids: torch.Size([24432, 40])
+start_pos_x: torch.Size([24432, 40])
+start_pos_y: torch.Size([24432, 40])
+end_pos_x: torch.Size([24432, 40])
+end_pos_y: torch.Size([24432, 40])
+Batch shape debug:
+event_times: torch.Size([24689, 40])
+team_ids: torch.Size([24689, 40])
+event_ids: torch.Size([24689, 40])
+player_ids: torch.Size([24689, 40])
+start_pos_x: torch.Size([24689, 40])
+start_pos_y: torch.Size([24689, 40])
+end_pos_x: torch.Size([24689, 40])
+end_pos_y: torch.Size([24689, 40])
+Batch shape debug:
+event_times: torch.Size([24202, 40])
+team_ids: torch.Size([24202, 40])
+event_ids: torch.Size([24202, 40])
+player_ids: torch.Size([24202, 40])
+start_pos_x: torch.Size([24202, 40])
+start_pos_y: torch.Size([24202, 40])
+end_pos_x: torch.Size([24202, 40])
+end_pos_y: torch.Size([24202, 40])
+Batch shape debug:
+event_times: torch.Size([23865, 40])
+team_ids: torch.Size([23865, 40])
+event_ids: torch.Size([23865, 40])
+player_ids: torch.Size([23865, 40])
+start_pos_x: torch.Size([23865, 40])
+start_pos_y: torch.Size([23865, 40])
+end_pos_x: torch.Size([23865, 40])
+end_pos_y: torch.Size([23865, 40])
+Batch shape debug:
+event_times: torch.Size([24003, 40])
+team_ids: torch.Size([24003, 40])
+event_ids: torch.Size([24003, 40])
+player_ids: torch.Size([24003, 40])
+start_pos_x: torch.Size([24003, 40])
+start_pos_y: torch.Size([24003, 40])
+end_pos_x: torch.Size([24003, 40])
+end_pos_y: torch.Size([24003, 40])
+Batch shape debug:
+event_times: torch.Size([23963, 40])
+team_ids: torch.Size([23963, 40])
+event_ids: torch.Size([23963, 40])
+player_ids: torch.Size([23963, 40])
+start_pos_x: torch.Size([23963, 40])
+start_pos_y: torch.Size([23963, 40])
+end_pos_x: torch.Size([23963, 40])
+end_pos_y: torch.Size([23963, 40])
+Batch shape debug:
+event_times: torch.Size([24211, 40])
+team_ids: torch.Size([24211, 40])
+event_ids: torch.Size([24211, 40])
+player_ids: torch.Size([24211, 40])
+start_pos_x: torch.Size([24211, 40])
+start_pos_y: torch.Size([24211, 40])
+end_pos_x: torch.Size([24211, 40])
+end_pos_y: torch.Size([24211, 40])
+Batch shape debug:
+event_times: torch.Size([24891, 40])
+team_ids: torch.Size([24891, 40])
+event_ids: torch.Size([24891, 40])
+player_ids: torch.Size([24891, 40])
+start_pos_x: torch.Size([24891, 40])
+start_pos_y: torch.Size([24891, 40])
+end_pos_x: torch.Size([24891, 40])
+end_pos_y: torch.Size([24891, 40])
+Batch shape debug:
+event_times: torch.Size([24484, 40])
+team_ids: torch.Size([24484, 40])
+event_ids: torch.Size([24484, 40])
+player_ids: torch.Size([24484, 40])
+start_pos_x: torch.Size([24484, 40])
+start_pos_y: torch.Size([24484, 40])
+end_pos_x: torch.Size([24484, 40])
+end_pos_y: torch.Size([24484, 40])
+Batch shape debug:
+event_times: torch.Size([23342, 40])
+team_ids: torch.Size([23342, 40])
+event_ids: torch.Size([23342, 40])
+player_ids: torch.Size([23342, 40])
+start_pos_x: torch.Size([23342, 40])
+start_pos_y: torch.Size([23342, 40])
+end_pos_x: torch.Size([23342, 40])
+end_pos_y: torch.Size([23342, 40])
+Building dataloader for dataset: <soccer_eventpred.modules.datamodule.soccer_dataset.SoccerEventDataset object at 0x7f82470e1b70>
+Total instances received: 16
+Total instances received: 16
+Total instances received: 6
+Batch shape debug:
+event_times: torch.Size([23940, 40])
+team_ids: torch.Size([23940, 40])
+event_ids: torch.Size([23940, 40])
+player_ids: torch.Size([23940, 40])
+start_pos_x: torch.Size([23940, 40])
+start_pos_y: torch.Size([23940, 40])
+end_pos_x: torch.Size([23940, 40])
+end_pos_y: torch.Size([23940, 40])
+Batch shape debug:
+event_times: torch.Size([23986, 40])
+team_ids: torch.Size([23986, 40])
+event_ids: torch.Size([23986, 40])
+player_ids: torch.Size([23986, 40])
+start_pos_x: torch.Size([23986, 40])
+start_pos_y: torch.Size([23986, 40])
+end_pos_x: torch.Size([23986, 40])
+end_pos_y: torch.Size([23986, 40])
+Batch shape debug:
+event_times: torch.Size([8784, 40])
+team_ids: torch.Size([8784, 40])
+event_ids: torch.Size([8784, 40])
+player_ids: torch.Size([8784, 40])
+start_pos_x: torch.Size([8784, 40])
+start_pos_y: torch.Size([8784, 40])
+end_pos_x: torch.Size([8784, 40])
+end_pos_y: torch.Size([8784, 40])
+Building dataloader for dataset: <soccer_eventpred.modules.datamodule.soccer_dataset.SoccerEventDataset object at 0x7f82470e1ab0>
+Total instances received: 6
+Total instances received: 16
+Total instances received: 16
+Batch shape debug:
+event_times: torch.Size([24233, 40])
+team_ids: torch.Size([24233, 40])
+event_ids: torch.Size([24233, 40])
+player_ids: torch.Size([24233, 40])
+start_pos_x: torch.Size([24233, 40])
+start_pos_y: torch.Size([24233, 40])
+end_pos_x: torch.Size([24233, 40])
+end_pos_y: torch.Size([24233, 40])
+Batch shape debug:
+event_times: torch.Size([23810, 40])
+team_ids: torch.Size([23810, 40])
+event_ids: torch.Size([23810, 40])
+player_ids: torch.Size([23810, 40])
+start_pos_x: torch.Size([23810, 40])
+start_pos_y: torch.Size([23810, 40])
+end_pos_x: torch.Size([23810, 40])
+end_pos_y: torch.Size([23810, 40])
+Batch shape debug:
+event_times: torch.Size([8862, 40])
+team_ids: torch.Size([8862, 40])
+event_ids: torch.Size([8862, 40])
+player_ids: torch.Size([8862, 40])
+start_pos_x: torch.Size([8862, 40])
+start_pos_y: torch.Size([8862, 40])
+end_pos_x: torch.Size([8862, 40])
+end_pos_y: torch.Size([8862, 40])
+Unique train labels: {0, 1, 2, 3, 4, 5}
+Unique valid labels: {0, 1, 2, 3, 4, 5}
+Number of classes: 6
+Starting XGBoost training...
+[0]	train-mlogloss:1.50851	valid-mlogloss:1.50895
+[1]	train-mlogloss:1.29382	valid-mlogloss:1.29413
+[2]	train-mlogloss:1.12971	valid-mlogloss:1.13024
+[3]	train-mlogloss:0.99077	valid-mlogloss:0.99121
+[4]	train-mlogloss:0.87448	valid-mlogloss:0.87490
+[5]	train-mlogloss:0.78473	valid-mlogloss:0.78502
+[6]	train-mlogloss:0.70718	valid-mlogloss:0.70745
+[7]	train-mlogloss:0.63900	valid-mlogloss:0.63929
+[8]	train-mlogloss:0.57095	valid-mlogloss:0.57122
+[9]	train-mlogloss:0.51944	valid-mlogloss:0.51967
+[10]	train-mlogloss:0.46560	valid-mlogloss:0.46581
+[11]	train-mlogloss:0.41879	valid-mlogloss:0.41905
+[12]	train-mlogloss:0.37629	valid-mlogloss:0.37653
+[13]	train-mlogloss:0.33839	valid-mlogloss:0.33860
+[14]	train-mlogloss:0.30456	valid-mlogloss:0.30475
+[15]	train-mlogloss:0.27848	valid-mlogloss:0.27866
+[16]	train-mlogloss:0.25091	valid-mlogloss:0.25107
+[17]	train-mlogloss:0.22618	valid-mlogloss:0.22632
+[18]	train-mlogloss:0.20717	valid-mlogloss:0.20730
+[19]	train-mlogloss:0.18994	valid-mlogloss:0.19005
+[20]	train-mlogloss:0.17144	valid-mlogloss:0.17154
+[21]	train-mlogloss:0.15732	valid-mlogloss:0.15742
+[22]	train-mlogloss:0.14369	valid-mlogloss:0.14378
+[23]	train-mlogloss:0.13013	valid-mlogloss:0.13024
+[24]	train-mlogloss:0.11963	valid-mlogloss:0.11972
+[25]	train-mlogloss:0.10807	valid-mlogloss:0.10815
+[26]	train-mlogloss:0.09791	valid-mlogloss:0.09800
+[27]	train-mlogloss:0.08848	valid-mlogloss:0.08857
+[28]	train-mlogloss:0.08120	valid-mlogloss:0.08129
+[29]	train-mlogloss:0.07340	valid-mlogloss:0.07348
+[30]	train-mlogloss:0.06720	valid-mlogloss:0.06728
+[31]	train-mlogloss:0.06077	valid-mlogloss:0.06085
+[32]	train-mlogloss:0.05570	valid-mlogloss:0.05577
+[33]	train-mlogloss:0.05036	valid-mlogloss:0.05043
+[34]	train-mlogloss:0.04554	valid-mlogloss:0.04560
+[35]	train-mlogloss:0.04204	valid-mlogloss:0.04210
+[36]	train-mlogloss:0.03803	valid-mlogloss:0.03808
+[37]	train-mlogloss:0.03439	valid-mlogloss:0.03444
+[38]	train-mlogloss:0.03169	valid-mlogloss:0.03173
+[39]	train-mlogloss:0.02866	valid-mlogloss:0.02870
+[40]	train-mlogloss:0.02592	valid-mlogloss:0.02596
+[41]	train-mlogloss:0.02346	valid-mlogloss:0.02349
+[42]	train-mlogloss:0.02163	valid-mlogloss:0.02165
+[43]	train-mlogloss:0.01957	valid-mlogloss:0.01960
+[44]	train-mlogloss:0.01771	valid-mlogloss:0.01773
+[45]	train-mlogloss:0.01609	valid-mlogloss:0.01611
+[46]	train-mlogloss:0.01455	valid-mlogloss:0.01458
+[47]	train-mlogloss:0.01317	valid-mlogloss:0.01319
+[48]	train-mlogloss:0.01196	valid-mlogloss:0.01198
+[49]	train-mlogloss:0.01098	valid-mlogloss:0.01100
+[50]	train-mlogloss:0.00993	valid-mlogloss:0.00995
+[51]	train-mlogloss:0.00902	valid-mlogloss:0.00904
+[52]	train-mlogloss:0.00835	valid-mlogloss:0.00837
+[53]	train-mlogloss:0.00756	valid-mlogloss:0.00758
+[54]	train-mlogloss:0.00684	valid-mlogloss:0.00685
+[55]	train-mlogloss:0.00622	valid-mlogloss:0.00623
+[56]	train-mlogloss:0.00562	valid-mlogloss:0.00564
+[57]	train-mlogloss:0.00512	valid-mlogloss:0.00513
+[58]	train-mlogloss:0.00463	valid-mlogloss:0.00465
+[59]	train-mlogloss:0.00419	valid-mlogloss:0.00421
+[60]	train-mlogloss:0.00380	valid-mlogloss:0.00381
+[61]	train-mlogloss:0.00350	valid-mlogloss:0.00351
+[62]	train-mlogloss:0.00317	valid-mlogloss:0.00318
+[63]	train-mlogloss:0.00292	valid-mlogloss:0.00293
+[64]	train-mlogloss:0.00264	valid-mlogloss:0.00265
+[65]	train-mlogloss:0.00239	valid-mlogloss:0.00240
+[66]	train-mlogloss:0.00217	valid-mlogloss:0.00217
+[67]	train-mlogloss:0.00201	valid-mlogloss:0.00201
+[68]	train-mlogloss:0.00182	valid-mlogloss:0.00183
+[69]	train-mlogloss:0.00165	valid-mlogloss:0.00166
+[70]	train-mlogloss:0.00150	valid-mlogloss:0.00150
+[71]	train-mlogloss:0.00136	valid-mlogloss:0.00137
+[72]	train-mlogloss:0.00123	valid-mlogloss:0.00124
+[73]	train-mlogloss:0.00112	valid-mlogloss:0.00112
+[74]	train-mlogloss:0.00102	valid-mlogloss:0.00102
+[75]	train-mlogloss:0.00094	valid-mlogloss:0.00094
+[76]	train-mlogloss:0.00085	valid-mlogloss:0.00085
+[77]	train-mlogloss:0.00079	valid-mlogloss:0.00079
+[78]	train-mlogloss:0.00073	valid-mlogloss:0.00073
+[79]	train-mlogloss:0.00066	valid-mlogloss:0.00067
+[80]	train-mlogloss:0.00060	valid-mlogloss:0.00060
+[81]	train-mlogloss:0.00056	valid-mlogloss:0.00056
+[82]	train-mlogloss:0.00052	valid-mlogloss:0.00052
+[83]	train-mlogloss:0.00047	valid-mlogloss:0.00047
+[84]	train-mlogloss:0.00043	valid-mlogloss:0.00043
+[85]	train-mlogloss:0.00039	valid-mlogloss:0.00040
+[86]	train-mlogloss:0.00036	valid-mlogloss:0.00036
+[87]	train-mlogloss:0.00033	valid-mlogloss:0.00033
+[88]	train-mlogloss:0.00030	valid-mlogloss:0.00030
+[89]	train-mlogloss:0.00028	valid-mlogloss:0.00028
+[90]	train-mlogloss:0.00025	valid-mlogloss:0.00025
+[91]	train-mlogloss:0.00023	valid-mlogloss:0.00023
+[92]	train-mlogloss:0.00021	valid-mlogloss:0.00021
+[93]	train-mlogloss:0.00020	valid-mlogloss:0.00020
+[94]	train-mlogloss:0.00018	valid-mlogloss:0.00018
+[95]	train-mlogloss:0.00016	valid-mlogloss:0.00016
+[96]	train-mlogloss:0.00015	valid-mlogloss:0.00015
+[97]	train-mlogloss:0.00014	valid-mlogloss:0.00014
+[98]	train-mlogloss:0.00013	valid-mlogloss:0.00013
+[99]	train-mlogloss:0.00012	valid-mlogloss:0.00012
+INFO:__main__:Evaluating XGBoost model on test data...
+INFO:__main__:Test Accuracy: 1.0000
+Validation Accuracy: 1.0000

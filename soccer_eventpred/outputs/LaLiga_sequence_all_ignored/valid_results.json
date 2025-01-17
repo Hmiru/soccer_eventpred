@@ -1,0 +1,9 @@
+[
+    {
+        "valid_loss": 1.8848075342248194e-05,
+        "valid_MulticlassAccuracy": 0.5217631459236145,
+        "valid_MulticlassPrecision": 0.3410494923591614,
+        "valid_MulticlassRecall": 0.5217631459236145,
+        "valid_MulticlassF1Score": 0.39636850357055664
+    }
+]

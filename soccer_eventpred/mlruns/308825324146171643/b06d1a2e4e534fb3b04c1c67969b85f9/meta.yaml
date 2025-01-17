@@ -1,0 +1,15 @@
+artifact_uri: file:///home/miru/soccer_eventpred/soccer_eventpred/mlruns/308825324146171643/b06d1a2e4e534fb3b04c1c67969b85f9/artifacts
+end_time: 1737026375617
+entry_point_name: ''
+experiment_id: '308825324146171643'
+lifecycle_stage: active
+run_id: b06d1a2e4e534fb3b04c1c67969b85f9
+run_name: LaLiga_sequence_all_ignored
+run_uuid: b06d1a2e4e534fb3b04c1c67969b85f9
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1737023720321
+status: 3
+tags: []
+user_id: root

@@ -1,0 +1,1706 @@
+{
+    "1613": {
+        "city": "Newcastle upon Tyne",
+        "name": "Newcastle United",
+        "officialName": "Newcastle United FC",
+        "area": {
+            "name": "England",
+            "id": "0",
+            "alpha3code": "XEN",
+            "alpha2code": ""
+        },
+        "type": "club"
+    },
+    "692": {
+        "city": "Vigo",
+        "name": "Celta de Vigo",
+        "officialName": "Real Club Celta de Vigo",
+        "area": {
+            "name": "Spain",
+            "id": "724",
+            "alpha3code": "ESP",
+            "alpha2code": "ES"
+        },
+        "type": "club"
+    },
+    "691": {
+        "city": "Barcelona",
+        "name": "Espanyol",
+        "officialName": "Reial Club Deportiu Espanyol",
+        "area": {
+            "name": "Spain",
+            "id": "724",
+            "alpha3code": "ESP",
+            "alpha2code": "ES"
+        },
+        "type": "club"
+    },
+    "696": {
+        "city": "Vitoria-Gasteiz",
+        "name": "Deportivo Alav\\u00e9s",
+        "officialName": "Deportivo Alavés",
+        "area": {
+            "name": "Spain",
+            "id": "724",
+            "alpha3code": "ESP",
+            "alpha2code": "ES"
+        },
+        "type": "club"
+    },
+    "695": {
+        "city": "Valencia",
+        "name": "Levante",
+        "officialName": "Levante UD",
+        "area": {
+            "name": "Spain",
+            "id": "724",
+            "alpha3code": "ESP",
+            "alpha2code": "ES"
+        },
+        "type": "club"
+    },
+    "3795": {
+        "city": "Troyes",
+        "name": "Troyes",
+        "officialName": "Espérance Sportive Troyes Aube Champagne",
+        "area": {
+            "name": "France",
+            "id": "250",
+            "alpha3code": "FRA",
+            "alpha2code": "FR"
+        },
+        "type": "club"
+    },
+    "698": {
+        "city": "Getafe (Madrid)",
+        "name": "Getafe",
+        "officialName": "Getafe Club de Fútbol",
+        "area": {
+            "name": "Spain",
+            "id": "724",
+            "alpha3code": "ESP",
+            "alpha2code": "ES"
+        },
+        "type": "club"
+    },
+    "2454": {
+        "city": "M\\u00f6nchengladbach",
+        "name": "Borussia M'gladbach",
+        "officialName": "Borussia VfL Mönchengladbach",
+        "area": {
+            "name": "Germany",
+            "id": "276",
+            "alpha3code": "DEU",
+            "alpha2code": "DE"
+        },
+        "type": "club"
+    },
+    "1673": {
+        "city": "Huddersfield, West Yorkshire",
+        "name": "Huddersfield Town",
+        "officialName": "Huddersfield Town FC",
+        "area": {
+            "name": "England",
+            "id": "0",
+            "alpha3code": "XEN",
+            "alpha2code": ""
+        },
+        "type": "club"
+    },
+    "678": {
+        "city": "Bilbao",
+        "name": "Athletic Club",
+        "officialName": "Athletic Club Bilbao",
+        "area": {
+            "name": "Spain",
+            "id": "724",
+            "alpha3code": "ESP",
+            "alpha2code": "ES"
+        },
+        "type": "club"
+    },
+    "679": {
+        "city": "Madrid",
+        "name": "Atl\\u00e9tico Madrid",
+        "officialName": "Club Atlético de Madrid",
+        "area": {
+            "name": "Spain",
+            "id": "724",
+            "alpha3code": "ESP",
+            "alpha2code": "ES"
+        },
+        "type": "club"
+    },
+    "3766": {
+        "city": "Lyon",
+        "name": "Olympique Lyonnais",
+        "officialName": "Olympique Lyonnais",
+        "area": {
+            "name": "France",
+            "id": "250",
+            "alpha3code": "FRA",
+            "alpha2code": "FR"
+        },
+        "type": "club"
+    },
+    "3767": {
+        "city": "Paris",
+        "name": "PSG",
+        "officialName": "Paris Saint-Germain FC",
+        "area": {
+            "name": "France",
+            "id": "250",
+            "alpha3code": "FRA",
+            "alpha2code": "FR"
+        },
+        "type": "club"
+    },
+    "674": {
+        "city": "Valencia",
+        "name": "Valencia",
+        "officialName": "Valencia Club de Fútbol",
+        "area": {
+            "name": "Spain",
+            "id": "724",
+            "alpha3code": "ESP",
+            "alpha2code": "ES"
+        },
+        "type": "club"
+    },
+    "675": {
+        "city": "Madrid",
+        "name": "Real Madrid",
+        "officialName": "Real Madrid Club de Fútbol",
+        "area": {
+            "name": "Spain",
+            "id": "724",
+            "alpha3code": "ESP",
+            "alpha2code": "ES"
+        },
+        "type": "club"
+    },
+    "676": {
+        "city": "Barcelona",
+        "name": "Barcelona",
+        "officialName": "FC Barcelona",
+        "area": {
+            "name": "Spain",
+            "id": "724",
+            "alpha3code": "ESP",
+            "alpha2code": "ES"
+        },
+        "type": "club"
+    },
+    "714": {
+        "city": "Las Palmas de Gran Canaria",
+        "name": "Las Palmas",
+        "officialName": "UD Las Palmas",
+        "area": {
+            "name": "Spain",
+            "id": "724",
+            "alpha3code": "ESP",
+            "alpha2code": "ES"
+        },
+        "type": "club"
+    },
+    "712": {
+        "city": "Legan\\u00e9s",
+        "name": "Legan\\u00e9s",
+        "officialName": "CD Leganés",
+        "area": {
+            "name": "Spain",
+            "id": "724",
+            "alpha3code": "ESP",
+            "alpha2code": "ES"
+        },
+        "type": "club"
+    },
+    "3204": {
+        "city": "Ferrara",
+        "name": "SPAL",
+        "officialName": "Società Polisportiva Ars et Labor 2013",
+        "area": {
+            "name": "Italy",
+            "id": "380",
+            "alpha3code": "ITA",
+            "alpha2code": "IT"
+        },
+        "type": "club"
+    },
+    "10531": {
+        "city": "Swansea",
+        "name": "Swansea City",
+        "officialName": "Swansea City AFC",
+        "area": {
+            "name": "Wales",
+            "id": "0",
+            "alpha3code": "XWA",
+            "alpha2code": ""
+        },
+        "type": "club"
+    },
+    "3771": {
+        "city": "Marseille",
+        "name": "Olympique Marseille",
+        "officialName": "Olympique de Marseille",
+        "area": {
+            "name": "France",
+            "id": "250",
+            "alpha3code": "FRA",
+            "alpha2code": "FR"
+        },
+        "type": "club"
+    },
+    "3770": {
+        "city": "La Chapelle-sur-Erdre",
+        "name": "Nantes",
+        "officialName": "FC Nantes",
+        "area": {
+            "name": "France",
+            "id": "250",
+            "alpha3code": "FRA",
+            "alpha2code": "FR"
+        },
+        "type": "club"
+    },
+    "3775": {
+        "city": "Nice",
+        "name": "Nice",
+        "officialName": "O.G.C. Nice Côte d'Azur",
+        "area": {
+            "name": "France",
+            "id": "250",
+            "alpha3code": "FRA",
+            "alpha2code": "FR"
+        },
+        "type": "club"
+    },
+    "3774": {
+        "city": "Rennes",
+        "name": "Rennes",
+        "officialName": "Stade Rennais FC",
+        "area": {
+            "name": "France",
+            "id": "250",
+            "alpha3code": "FRA",
+            "alpha2code": "FR"
+        },
+        "type": "club"
+    },
+    "3779": {
+        "city": "Strasbourg",
+        "name": "Strasbourg",
+        "officialName": "RC Strasbourg Alsace",
+        "area": {
+            "name": "France",
+            "id": "250",
+            "alpha3code": "FRA",
+            "alpha2code": "FR"
+        },
+        "type": "club"
+    },
+    "701": {
+        "city": "Eibar",
+        "name": "Eibar",
+        "officialName": "SD Eibar",
+        "area": {
+            "name": "Spain",
+            "id": "724",
+            "alpha3code": "ESP",
+            "alpha2code": "ES"
+        },
+        "type": "club"
+    },
+    "1659": {
+        "city": "Bournemouth, Dorset",
+        "name": "AFC Bournemouth",
+        "officialName": "AFC Bournemouth",
+        "area": {
+            "name": "England",
+            "id": "0",
+            "alpha3code": "XEN",
+            "alpha2code": ""
+        },
+        "type": "club"
+    },
+    "1651": {
+        "city": "Brighton, East Sussex",
+        "name": "Brighton & Hove Albion",
+        "officialName": "Brighton & Hove Albion FC",
+        "area": {
+            "name": "England",
+            "id": "0",
+            "alpha3code": "XEN",
+            "alpha2code": ""
+        },
+        "type": "club"
+    },
+    "2443": {
+        "city": "Bremen",
+        "name": "Werder Bremen",
+        "officialName": "SV Werder Bremen",
+        "area": {
+            "name": "Germany",
+            "id": "276",
+            "alpha3code": "DEU",
+            "alpha2code": "DE"
+        },
+        "type": "club"
+    },
+    "2446": {
+        "city": "Leverkusen",
+        "name": "Bayer Leverkusen",
+        "officialName": "TSV Bayer 04 Leverkusen",
+        "area": {
+            "name": "Germany",
+            "id": "276",
+            "alpha3code": "DEU",
+            "alpha2code": "DE"
+        },
+        "type": "club"
+    },
+    "2447": {
+        "city": "Dortmund",
+        "name": "Borussia Dortmund",
+        "officialName": "BV Borussia 09 Dortmund",
+        "area": {
+            "name": "Germany",
+            "id": "276",
+            "alpha3code": "DEU",
+            "alpha2code": "DE"
+        },
+        "type": "club"
+    },
+    "2444": {
+        "city": "M\\u00fcnchen",
+        "name": "Bayern M\\u00fcnchen",
+        "officialName": "FC Bayern München",
+        "area": {
+            "name": "Germany",
+            "id": "276",
+            "alpha3code": "DEU",
+            "alpha2code": "DE"
+        },
+        "type": "club"
+    },
+    "2445": {
+        "city": "Stuttgart",
+        "name": "Stuttgart",
+        "officialName": "VfB Stuttgart 1893",
+        "area": {
+            "name": "Germany",
+            "id": "276",
+            "alpha3code": "DEU",
+            "alpha2code": "DE"
+        },
+        "type": "club"
+    },
+    "2449": {
+        "city": "Gelsenkirchen",
+        "name": "Schalke 04",
+        "officialName": "FC Schalke 04",
+        "area": {
+            "name": "Germany",
+            "id": "276",
+            "alpha3code": "DEU",
+            "alpha2code": "DE"
+        },
+        "type": "club"
+    },
+    "3157": {
+        "city": "Milano",
+        "name": "Milan",
+        "officialName": "AC Milan",
+        "area": {
+            "name": "Italy",
+            "id": "380",
+            "alpha3code": "ITA",
+            "alpha2code": "IT"
+        },
+        "type": "club"
+    },
+    "3799": {
+        "city": "Angers",
+        "name": "Angers",
+        "officialName": "Angers SCO",
+        "area": {
+            "name": "France",
+            "id": "250",
+            "alpha3code": "FRA",
+            "alpha2code": "FR"
+        },
+        "type": "club"
+    },
+    "3159": {
+        "city": "Torino",
+        "name": "Juventus",
+        "officialName": "Juventus FC",
+        "area": {
+            "name": "Italy",
+            "id": "380",
+            "alpha3code": "ITA",
+            "alpha2code": "IT"
+        },
+        "type": "club"
+    },
+    "3158": {
+        "city": "Roma",
+        "name": "Roma",
+        "officialName": "AS Roma",
+        "area": {
+            "name": "Italy",
+            "id": "380",
+            "alpha3code": "ITA",
+            "alpha2code": "IT"
+        },
+        "type": "club"
+    },
+    "3315": {
+        "city": "Sassuolo",
+        "name": "Sassuolo",
+        "officialName": "US Sassuolo Calcio",
+        "area": {
+            "name": "Italy",
+            "id": "380",
+            "alpha3code": "ITA",
+            "alpha2code": "IT"
+        },
+        "type": "club"
+    },
+    "1646": {
+        "city": "Burnley, Lancashire",
+        "name": "Burnley",
+        "officialName": "Burnley FC",
+        "area": {
+            "name": "England",
+            "id": "0",
+            "alpha3code": "XEN",
+            "alpha2code": ""
+        },
+        "type": "club"
+    },
+    "3772": {
+        "city": "Le Haillan",
+        "name": "Bordeaux",
+        "officialName": "FC Girondins de Bordeaux",
+        "area": {
+            "name": "France",
+            "id": "250",
+            "alpha3code": "FRA",
+            "alpha2code": "FR"
+        },
+        "type": "club"
+    },
+    "2455": {
+        "city": "Hannover",
+        "name": "Hannover 96",
+        "officialName": "Hannover 96",
+        "area": {
+            "name": "Germany",
+            "id": "276",
+            "alpha3code": "DEU",
+            "alpha2code": "DE"
+        },
+        "type": "club"
+    },
+    "3804": {
+        "city": "Dijon",
+        "name": "Dijon",
+        "officialName": "Dijon FCO",
+        "area": {
+            "name": "France",
+            "id": "250",
+            "alpha3code": "FRA",
+            "alpha2code": "FR"
+        },
+        "type": "club"
+    },
+    "2457": {
+        "city": "Berlin",
+        "name": "Hertha BSC",
+        "officialName": "Hertha BSC",
+        "area": {
+            "name": "Germany",
+            "id": "276",
+            "alpha3code": "DEU",
+            "alpha2code": "DE"
+        },
+        "type": "club"
+    },
+    "2451": {
+        "city": "Wolfsburg",
+        "name": "Wolfsburg",
+        "officialName": "VfL Wolfsburg",
+        "area": {
+            "name": "Germany",
+            "id": "276",
+            "alpha3code": "DEU",
+            "alpha2code": "DE"
+        },
+        "type": "club"
+    },
+    "2450": {
+        "city": "Hamburg",
+        "name": "Hamburger SV",
+        "officialName": "Hamburger SV",
+        "area": {
+            "name": "Germany",
+            "id": "276",
+            "alpha3code": "DEU",
+            "alpha2code": "DE"
+        },
+        "type": "club"
+    },
+    "2453": {
+        "city": "Freiburg im Breisgau",
+        "name": "Freiburg",
+        "officialName": "SC Freiburg",
+        "area": {
+            "name": "Germany",
+            "id": "276",
+            "alpha3code": "DEU",
+            "alpha2code": "DE"
+        },
+        "type": "club"
+    },
+    "3166": {
+        "city": "Bologna",
+        "name": "Bologna",
+        "officialName": "Bologna FC 1909",
+        "area": {
+            "name": "Italy",
+            "id": "380",
+            "alpha3code": "ITA",
+            "alpha2code": "IT"
+        },
+        "type": "club"
+    },
+    "3777": {
+        "city": "Metz",
+        "name": "Metz",
+        "officialName": "FC Metz",
+        "area": {
+            "name": "France",
+            "id": "250",
+            "alpha3code": "FRA",
+            "alpha2code": "FR"
+        },
+        "type": "club"
+    },
+    "3164": {
+        "city": "Genova",
+        "name": "Sampdoria",
+        "officialName": "UC Sampdoria",
+        "area": {
+            "name": "Italy",
+            "id": "380",
+            "alpha3code": "ITA",
+            "alpha2code": "IT"
+        },
+        "type": "club"
+    },
+    "3165": {
+        "city": "Verona",
+        "name": "Chievo",
+        "officialName": "AC Chievo Verona",
+        "area": {
+            "name": "Italy",
+            "id": "380",
+            "alpha3code": "ITA",
+            "alpha2code": "IT"
+        },
+        "type": "club"
+    },
+    "3162": {
+        "city": "Formello",
+        "name": "Lazio",
+        "officialName": "SS Lazio",
+        "area": {
+            "name": "Italy",
+            "id": "380",
+            "alpha3code": "ITA",
+            "alpha2code": "IT"
+        },
+        "type": "club"
+    },
+    "3163": {
+        "city": "Udine",
+        "name": "Udinese",
+        "officialName": "Udinese Calcio",
+        "area": {
+            "name": "Italy",
+            "id": "380",
+            "alpha3code": "ITA",
+            "alpha2code": "IT"
+        },
+        "type": "club"
+    },
+    "3161": {
+        "city": "Milano",
+        "name": "Internazionale",
+        "officialName": "FC Internazionale Milano",
+        "area": {
+            "name": "Italy",
+            "id": "380",
+            "alpha3code": "ITA",
+            "alpha2code": "IT"
+        },
+        "type": "club"
+    },
+    "1631": {
+        "city": "Leicester",
+        "name": "Leicester City",
+        "officialName": "Leicester City FC",
+        "area": {
+            "name": "England",
+            "id": "0",
+            "alpha3code": "XEN",
+            "alpha2code": ""
+        },
+        "type": "club"
+    },
+    "1633": {
+        "city": "London",
+        "name": "West Ham United",
+        "officialName": "West Ham United FC",
+        "area": {
+            "name": "England",
+            "id": "0",
+            "alpha3code": "XEN",
+            "alpha2code": ""
+        },
+        "type": "club"
+    },
+    "1639": {
+        "city": "Stoke-on-Trent",
+        "name": "Stoke City",
+        "officialName": "Stoke City FC",
+        "area": {
+            "name": "England",
+            "id": "0",
+            "alpha3code": "XEN",
+            "alpha2code": ""
+        },
+        "type": "club"
+    },
+    "3219": {
+        "city": "Benevento",
+        "name": "Benevento",
+        "officialName": "Benevento Calcio",
+        "area": {
+            "name": "Italy",
+            "id": "380",
+            "alpha3code": "ITA",
+            "alpha2code": "IT"
+        },
+        "type": "club"
+    },
+    "3782": {
+        "city": "Saint-\\u00c9tienne",
+        "name": "Saint-\\u00c9tienne",
+        "officialName": "AS Saint-Étienne",
+        "area": {
+            "name": "France",
+            "id": "250",
+            "alpha3code": "FRA",
+            "alpha2code": "FR"
+        },
+        "type": "club"
+    },
+    "756": {
+        "city": "Girona",
+        "name": "Girona",
+        "officialName": "Girona FC",
+        "area": {
+            "name": "Spain",
+            "id": "724",
+            "alpha3code": "ESP",
+            "alpha2code": "ES"
+        },
+        "type": "club"
+    },
+    "1644": {
+        "city": "Watford",
+        "name": "Watford",
+        "officialName": "Watford FC",
+        "area": {
+            "name": "England",
+            "id": "0",
+            "alpha3code": "XEN",
+            "alpha2code": ""
+        },
+        "type": "club"
+    },
+    "2482": {
+        "city": "Sinsheim",
+        "name": "Hoffenheim",
+        "officialName": "TSG 1899 Hoffenheim",
+        "area": {
+            "name": "Germany",
+            "id": "276",
+            "alpha3code": "DEU",
+            "alpha2code": "DE"
+        },
+        "type": "club"
+    },
+    "3173": {
+        "city": "Cagliari",
+        "name": "Cagliari",
+        "officialName": "Cagliari Calcio",
+        "area": {
+            "name": "Italy",
+            "id": "380",
+            "alpha3code": "ITA",
+            "alpha2code": "IT"
+        },
+        "type": "club"
+    },
+    "3172": {
+        "city": "Ciserano",
+        "name": "Atalanta",
+        "officialName": "Atalanta Bergamasca Calcio",
+        "area": {
+            "name": "Italy",
+            "id": "380",
+            "alpha3code": "ITA",
+            "alpha2code": "IT"
+        },
+        "type": "club"
+    },
+    "3176": {
+        "city": "Firenze",
+        "name": "Fiorentina",
+        "officialName": "ACF Fiorentina",
+        "area": {
+            "name": "Italy",
+            "id": "380",
+            "alpha3code": "ITA",
+            "alpha2code": "IT"
+        },
+        "type": "club"
+    },
+    "1623": {
+        "city": "Liverpool",
+        "name": "Everton",
+        "officialName": "Everton FC",
+        "area": {
+            "name": "England",
+            "id": "0",
+            "alpha3code": "XEN",
+            "alpha2code": ""
+        },
+        "type": "club"
+    },
+    "1627": {
+        "city": "West Bromwich",
+        "name": "West Bromwich Albion",
+        "officialName": "West Bromwich Albion FC",
+        "area": {
+            "name": "England",
+            "id": "0",
+            "alpha3code": "XEN",
+            "alpha2code": ""
+        },
+        "type": "club"
+    },
+    "1625": {
+        "city": "Manchester",
+        "name": "Manchester City",
+        "officialName": "Manchester City FC",
+        "area": {
+            "name": "England",
+            "id": "0",
+            "alpha3code": "XEN",
+            "alpha2code": ""
+        },
+        "type": "club"
+    },
+    "1624": {
+        "city": "London",
+        "name": "Tottenham Hotspur",
+        "officialName": "Tottenham Hotspur FC",
+        "area": {
+            "name": "England",
+            "id": "0",
+            "alpha3code": "XEN",
+            "alpha2code": ""
+        },
+        "type": "club"
+    },
+    "2481": {
+        "city": "Augsburg",
+        "name": "Augsburg",
+        "officialName": "FC Augsburg",
+        "area": {
+            "name": "Germany",
+            "id": "276",
+            "alpha3code": "DEU",
+            "alpha2code": "DE"
+        },
+        "type": "club"
+    },
+    "1628": {
+        "city": "London",
+        "name": "Crystal Palace",
+        "officialName": "Crystal Palace FC",
+        "area": {
+            "name": "England",
+            "id": "0",
+            "alpha3code": "XEN",
+            "alpha2code": ""
+        },
+        "type": "club"
+    },
+    "19830": {
+        "city": "Monaco",
+        "name": "Monaco",
+        "officialName": "AS Monaco FC",
+        "area": {
+            "name": "Monaco",
+            "id": "492",
+            "alpha3code": "MCO",
+            "alpha2code": "MC"
+        },
+        "type": "club"
+    },
+    "2460": {
+        "city": "Mainz",
+        "name": "Mainz 05",
+        "officialName": "1. FSV Mainz 05",
+        "area": {
+            "name": "Germany",
+            "id": "276",
+            "alpha3code": "DEU",
+            "alpha2code": "DE"
+        },
+        "type": "club"
+    },
+    "3776": {
+        "city": "Villeneuve-d'Ascq",
+        "name": "Lille",
+        "officialName": "Lille OSC Métropole",
+        "area": {
+            "name": "France",
+            "id": "250",
+            "alpha3code": "FRA",
+            "alpha2code": "FR"
+        },
+        "type": "club"
+    },
+    "2462": {
+        "city": "Frankfurt am Main",
+        "name": "Eintracht Frankfurt",
+        "officialName": "Eintracht Frankfurt",
+        "area": {
+            "name": "Germany",
+            "id": "276",
+            "alpha3code": "DEU",
+            "alpha2code": "DE"
+        },
+        "type": "club"
+    },
+    "1619": {
+        "city": "Southampton, Hampshire",
+        "name": "Southampton",
+        "officialName": "Southampton FC",
+        "area": {
+            "name": "England",
+            "id": "0",
+            "alpha3code": "XEN",
+            "alpha2code": ""
+        },
+        "type": "club"
+    },
+    "2463": {
+        "city": "K\\u00f6ln",
+        "name": "K\\u00f6ln",
+        "officialName": "1. FC Köln",
+        "area": {
+            "name": "Germany",
+            "id": "276",
+            "alpha3code": "DEU",
+            "alpha2code": "DE"
+        },
+        "type": "club"
+    },
+    "1612": {
+        "city": "Liverpool",
+        "name": "Liverpool",
+        "officialName": "Liverpool FC",
+        "area": {
+            "name": "England",
+            "id": "0",
+            "alpha3code": "XEN",
+            "alpha2code": ""
+        },
+        "type": "club"
+    },
+    "1610": {
+        "city": "London",
+        "name": "Chelsea",
+        "officialName": "Chelsea FC",
+        "area": {
+            "name": "England",
+            "id": "0",
+            "alpha3code": "XEN",
+            "alpha2code": ""
+        },
+        "type": "club"
+    },
+    "1611": {
+        "city": "Manchester",
+        "name": "Manchester United",
+        "officialName": "Manchester United FC",
+        "area": {
+            "name": "England",
+            "id": "0",
+            "alpha3code": "XEN",
+            "alpha2code": ""
+        },
+        "type": "club"
+    },
+    "3185": {
+        "city": "Torino",
+        "name": "Torino",
+        "officialName": "Torino FC",
+        "area": {
+            "name": "Italy",
+            "id": "380",
+            "alpha3code": "ITA",
+            "alpha2code": "IT"
+        },
+        "type": "club"
+    },
+    "3187": {
+        "city": "Castel Volturno",
+        "name": "Napoli",
+        "officialName": "SSC Napoli",
+        "area": {
+            "name": "Italy",
+            "id": "380",
+            "alpha3code": "ITA",
+            "alpha2code": "IT"
+        },
+        "type": "club"
+    },
+    "677": {
+        "city": "A Coru\\u00f1a",
+        "name": "Deportivo La Coru\\u00f1a",
+        "officialName": "Real Club Deportivo de La Coruña",
+        "area": {
+            "name": "Spain",
+            "id": "724",
+            "alpha3code": "ESP",
+            "alpha2code": "ES"
+        },
+        "type": "club"
+    },
+    "2975": {
+        "city": "Leipzig",
+        "name": "RB Leipzig",
+        "officialName": "Rasen Ballsport Leipzig",
+        "area": {
+            "name": "Germany",
+            "id": "276",
+            "alpha3code": "DEU",
+            "alpha2code": "DE"
+        },
+        "type": "club"
+    },
+    "1609": {
+        "city": "London",
+        "name": "Arsenal",
+        "officialName": "Arsenal FC",
+        "area": {
+            "name": "England",
+            "id": "0",
+            "alpha3code": "XEN",
+            "alpha2code": ""
+        },
+        "type": "club"
+    },
+    "3783": {
+        "city": "Caen",
+        "name": "Caen",
+        "officialName": "Stade Malherbe Caen",
+        "area": {
+            "name": "France",
+            "id": "250",
+            "alpha3code": "FRA",
+            "alpha2code": "FR"
+        },
+        "type": "club"
+    },
+    "3780": {
+        "city": "Toulouse",
+        "name": "Toulouse",
+        "officialName": "Toulouse FC",
+        "area": {
+            "name": "France",
+            "id": "250",
+            "alpha3code": "FRA",
+            "alpha2code": "FR"
+        },
+        "type": "club"
+    },
+    "3787": {
+        "city": "Montpellier",
+        "name": "Montpellier",
+        "officialName": "Montpellier HSC",
+        "area": {
+            "name": "France",
+            "id": "250",
+            "alpha3code": "FRA",
+            "alpha2code": "FR"
+        },
+        "type": "club"
+    },
+    "3785": {
+        "city": "Guingamp",
+        "name": "Guingamp",
+        "officialName": "En Avant Guingamp",
+        "area": {
+            "name": "France",
+            "id": "250",
+            "alpha3code": "FRA",
+            "alpha2code": "FR"
+        },
+        "type": "club"
+    },
+    "3789": {
+        "city": "Amiens",
+        "name": "Amiens SC",
+        "officialName": "Amiens SC",
+        "area": {
+            "name": "France",
+            "id": "250",
+            "alpha3code": "FRA",
+            "alpha2code": "FR"
+        },
+        "type": "club"
+    },
+    "3197": {
+        "city": "Crotone",
+        "name": "Crotone",
+        "officialName": "FC Crotone",
+        "area": {
+            "name": "Italy",
+            "id": "380",
+            "alpha3code": "ITA",
+            "alpha2code": "IT"
+        },
+        "type": "club"
+    },
+    "3194": {
+        "city": "Verona",
+        "name": "Hellas Verona",
+        "officialName": "Hellas Verona FC",
+        "area": {
+            "name": "Italy",
+            "id": "380",
+            "alpha3code": "ITA",
+            "alpha2code": "IT"
+        },
+        "type": "club"
+    },
+    "3193": {
+        "city": "Genova",
+        "name": "Genoa",
+        "officialName": "Genoa CFC",
+        "area": {
+            "name": "Italy",
+            "id": "380",
+            "alpha3code": "ITA",
+            "alpha2code": "IT"
+        },
+        "type": "club"
+    },
+    "684": {
+        "city": "Sevilla",
+        "name": "Real Betis",
+        "officialName": "Real Betis Balompié",
+        "area": {
+            "name": "Spain",
+            "id": "724",
+            "alpha3code": "ESP",
+            "alpha2code": "ES"
+        },
+        "type": "club"
+    },
+    "687": {
+        "city": "Donostia-San Sebasti\\u00e1n",
+        "name": "Real Sociedad",
+        "officialName": "Real Sociedad de Fútbol",
+        "area": {
+            "name": "Spain",
+            "id": "724",
+            "alpha3code": "ESP",
+            "alpha2code": "ES"
+        },
+        "type": "club"
+    },
+    "680": {
+        "city": "Sevilla",
+        "name": "Sevilla",
+        "officialName": "Sevilla FC",
+        "area": {
+            "name": "Spain",
+            "id": "724",
+            "alpha3code": "ESP",
+            "alpha2code": "ES"
+        },
+        "type": "club"
+    },
+    "683": {
+        "city": "Malaga",
+        "name": "M\\u00e1laga",
+        "officialName": "Málaga Club de Fútbol",
+        "area": {
+            "name": "Spain",
+            "id": "724",
+            "alpha3code": "ESP",
+            "alpha2code": "ES"
+        },
+        "type": "club"
+    },
+    "682": {
+        "city": "Villarreal",
+        "name": "Villarreal",
+        "officialName": "Villarreal Club de Fútbol",
+        "area": {
+            "name": "Spain",
+            "id": "724",
+            "alpha3code": "ESP",
+            "alpha2code": "ES"
+        },
+        "type": "club"
+    },
+    "14855": {
+        "city": "Seoul",
+        "name": "Korea Republic",
+        "officialName": "Korea Republic",
+        "area": {
+            "name": "Korea Republic",
+            "id": 410,
+            "alpha3code": "KOR",
+            "alpha2code": "KR"
+        },
+        "type": "national"
+    },
+    "10451": {
+        "city": "Budapest",
+        "name": "Hungary",
+        "officialName": "Hungary",
+        "area": {
+            "name": "Hungary",
+            "id": 348,
+            "alpha3code": "HUN",
+            "alpha2code": "HU"
+        },
+        "type": "national"
+    },
+    "4687": {
+        "city": "Istanbul",
+        "name": "Turkey",
+        "officialName": "Turkey",
+        "area": {
+            "name": "Turkey",
+            "id": 792,
+            "alpha3code": "TUR",
+            "alpha2code": "TR"
+        },
+        "type": "national"
+    },
+    "14358": {
+        "city": "Moskva",
+        "name": "Russia",
+        "officialName": "Russia",
+        "area": {
+            "name": "Russia",
+            "id": 643,
+            "alpha3code": "RUS",
+            "alpha2code": "RU"
+        },
+        "type": "national"
+    },
+    "7047": {
+        "city": "Solna",
+        "name": "Sweden",
+        "officialName": "Sweden",
+        "area": {
+            "name": "Sweden",
+            "id": 752,
+            "alpha3code": "SWE",
+            "alpha2code": "SE"
+        },
+        "type": "national"
+    },
+    "16276": {
+        "city": "El Menzah",
+        "name": "Tunisia",
+        "officialName": "Tunisia",
+        "area": {
+            "name": "Tunisia",
+            "id": 788,
+            "alpha3code": "TUN",
+            "alpha2code": "TN"
+        },
+        "type": "national"
+    },
+    "6380": {
+        "city": "Rio de Janeiro, Rio de Janeiro",
+        "name": "Brazil",
+        "officialName": "Brazil",
+        "area": {
+            "name": "Brazil",
+            "id": 76,
+            "alpha3code": "BRA",
+            "alpha2code": "BR"
+        },
+        "type": "national"
+    },
+    "3148": {
+        "city": "Frankfurt am Main",
+        "name": "Germany",
+        "officialName": "Germany",
+        "area": {
+            "name": "Germany",
+            "id": 276,
+            "alpha3code": "DEU",
+            "alpha2code": "DE"
+        },
+        "type": "national"
+    },
+    "8731": {
+        "city": "Tiran\\u00eb (Tirana)",
+        "name": "Albania",
+        "officialName": "Albania",
+        "area": {
+            "name": "Albania",
+            "id": 8,
+            "alpha3code": "ALB",
+            "alpha2code": "AL"
+        },
+        "type": "national"
+    },
+    "11944": {
+        "city": "Bucure\\u015fti",
+        "name": "Romania",
+        "officialName": "Romania",
+        "area": {
+            "name": "Romania",
+            "id": 642,
+            "alpha3code": "ROU",
+            "alpha2code": "RO"
+        },
+        "type": "national"
+    },
+    "14622": {
+        "city": "Kyiv (Kiev)",
+        "name": "Ukraine",
+        "officialName": "Ukraine",
+        "area": {
+            "name": "Ukraine",
+            "id": 804,
+            "alpha3code": "UKR",
+            "alpha2code": "UA"
+        },
+        "type": "national"
+    },
+    "16216": {
+        "city": "Rabat",
+        "name": "Morocco",
+        "officialName": "Morocco",
+        "area": {
+            "name": "Morocco",
+            "id": 504,
+            "alpha3code": "MAR",
+            "alpha2code": "MA"
+        },
+        "type": "national"
+    },
+    "14496": {
+        "city": "Bratislava",
+        "name": "Slovakia",
+        "officialName": "Slovakia",
+        "area": {
+            "name": "Slovakia",
+            "id": 703,
+            "alpha3code": "SVK",
+            "alpha2code": "SK"
+        },
+        "type": "national"
+    },
+    "12430": {
+        "city": "Bogot\\u00e1 D.C.",
+        "name": "Colombia",
+        "officialName": "Colombia",
+        "area": {
+            "name": "Colombia",
+            "id": 170,
+            "alpha3code": "COL",
+            "alpha2code": "CO"
+        },
+        "type": "national"
+    },
+    "17929": {
+        "city": "Ciudad de Panam\\u00e1",
+        "name": "Panama",
+        "officialName": "Panama",
+        "area": {
+            "name": "Panama",
+            "id": 591,
+            "alpha3code": "PAN",
+            "alpha2code": "PA"
+        },
+        "type": "national"
+    },
+    "8493": {
+        "city": "Sydney",
+        "name": "Australia",
+        "officialName": "Australia",
+        "area": {
+            "name": "Australia",
+            "id": 36,
+            "alpha3code": "AUS",
+            "alpha2code": "AU"
+        },
+        "type": "national"
+    },
+    "12274": {
+        "city": "Buenos Aires, Ciudad de Buenos Aires",
+        "name": "Argentina",
+        "officialName": "Argentina",
+        "area": {
+            "name": "Argentina",
+            "id": 32,
+            "alpha3code": "ARG",
+            "alpha2code": "AR"
+        },
+        "type": "national"
+    },
+    "10962": {
+        "city": "Belfast",
+        "name": "Northern Ireland",
+        "officialName": "Northern Ireland",
+        "area": {
+            "name": "Northern Ireland",
+            "id": 0,
+            "alpha3code": "XNI",
+            "alpha2code": ""
+        },
+        "type": "national"
+    },
+    "9905": {
+        "city": "Lisboa",
+        "name": "Portugal",
+        "officialName": "Portugal",
+        "area": {
+            "name": "Portugal",
+            "id": 620,
+            "alpha3code": "PRT",
+            "alpha2code": "PT"
+        },
+        "type": "national"
+    },
+    "5629": {
+        "city": "Bruxelles (Brussel)",
+        "name": "Belgium",
+        "officialName": "Belgium",
+        "area": {
+            "name": "Belgium",
+            "id": 56,
+            "alpha3code": "BEL",
+            "alpha2code": "BE"
+        },
+        "type": "national"
+    },
+    "7712": {
+        "city": "Br\\u00f8ndby",
+        "name": "Denmark",
+        "officialName": "Denmark",
+        "area": {
+            "name": "Denmark",
+            "id": 208,
+            "alpha3code": "DNK",
+            "alpha2code": "DK"
+        },
+        "type": "national"
+    },
+    "15670": {
+        "city": "Montevideo",
+        "name": "Uruguay",
+        "officialName": "Uruguay",
+        "area": {
+            "name": "Uruguay",
+            "id": 858,
+            "alpha3code": "URY",
+            "alpha2code": "UY"
+        },
+        "type": "national"
+    },
+    "10682": {
+        "city": "Cardiff",
+        "name": "Wales",
+        "officialName": "Wales",
+        "area": {
+            "name": "Wales",
+            "id": 0,
+            "alpha3code": "XWA",
+            "alpha2code": ""
+        },
+        "type": "national"
+    },
+    "16871": {
+        "city": "San Jos\\u00e9",
+        "name": "Costa Rica",
+        "officialName": "Costa Rica",
+        "area": {
+            "name": "Costa Rica",
+            "id": 188,
+            "alpha3code": "CRI",
+            "alpha2code": "CR"
+        },
+        "type": "national"
+    },
+    "2413": {
+        "city": "London",
+        "name": "England",
+        "officialName": "England",
+        "area": {
+            "name": "England",
+            "id": 0,
+            "alpha3code": "XEN",
+            "alpha2code": ""
+        },
+        "type": "national"
+    },
+    "16129": {
+        "city": "Cairo",
+        "name": "Egypt",
+        "officialName": "Egypt",
+        "area": {
+            "name": "Egypt",
+            "id": 818,
+            "alpha3code": "EGY",
+            "alpha2code": "EG"
+        },
+        "type": "national"
+    },
+    "12913": {
+        "city": "T\\u014dky\\u014d (Tokyo)",
+        "name": "Japan",
+        "officialName": "Japan",
+        "area": {
+            "name": "Japan",
+            "id": 392,
+            "alpha3code": "JPN",
+            "alpha2code": "JP"
+        },
+        "type": "national"
+    },
+    "10840": {
+        "city": "Tehr\\u0101n (Teheran)",
+        "name": "Iran",
+        "officialName": "Iran",
+        "area": {
+            "name": "Iran",
+            "id": 364,
+            "alpha3code": "IRN",
+            "alpha2code": "IR"
+        },
+        "type": "national"
+    },
+    "9109": {
+        "city": "Wien",
+        "name": "Austria",
+        "officialName": "Austria",
+        "area": {
+            "name": "Austria",
+            "id": 40,
+            "alpha3code": "AUT",
+            "alpha2code": "AT"
+        },
+        "type": "national"
+    },
+    "7839": {
+        "city": "Reykjav\\u00edk",
+        "name": "Iceland",
+        "officialName": "Iceland",
+        "area": {
+            "name": "Iceland",
+            "id": 352,
+            "alpha3code": "ISL",
+            "alpha2code": "IS"
+        },
+        "type": "national"
+    },
+    "9598": {
+        "city": "Zagreb",
+        "name": "Croatia",
+        "officialName": "Croatia",
+        "area": {
+            "name": "Croatia",
+            "id": 191,
+            "alpha3code": "HRV",
+            "alpha2code": "HR"
+        },
+        "type": "national"
+    },
+    "15473": {
+        "city": "Coyoac\\u00e1n, Ciudad de M\\u00e9xico (D.F.)",
+        "name": "Mexico",
+        "officialName": "Mexico",
+        "area": {
+            "name": "Mexico",
+            "id": 484,
+            "alpha3code": "MEX",
+            "alpha2code": "MX"
+        },
+        "type": "national"
+    },
+    "8274": {
+        "city": "Dublin",
+        "name": "Republic of Ireland",
+        "officialName": "Republic of Ireland",
+        "area": {
+            "name": "Ireland Republic",
+            "id": 372,
+            "alpha3code": "IRL",
+            "alpha2code": "IE"
+        },
+        "type": "national"
+    },
+    "11555": {
+        "city": "Praha",
+        "name": "Czech Republic",
+        "officialName": "Czech Republic",
+        "area": {
+            "name": "Czech Republic",
+            "id": 203,
+            "alpha3code": "CZE",
+            "alpha2code": "CZ"
+        },
+        "type": "national"
+    },
+    "19314": {
+        "city": "Dakar",
+        "name": "Senegal",
+        "officialName": "Senegal",
+        "area": {
+            "name": "Senegal",
+            "id": 686,
+            "alpha3code": "SEN",
+            "alpha2code": "SN"
+        },
+        "type": "national"
+    },
+    "3757": {
+        "city": "Roma",
+        "name": "Italy",
+        "officialName": "Italy",
+        "area": {
+            "name": "Italy",
+            "id": 380,
+            "alpha3code": "ITA",
+            "alpha2code": "IT"
+        },
+        "type": "national"
+    },
+    "15594": {
+        "city": "Lima",
+        "name": "Peru",
+        "officialName": "Peru",
+        "area": {
+            "name": "Peru",
+            "id": 604,
+            "alpha3code": "PER",
+            "alpha2code": "PE"
+        },
+        "type": "national"
+    },
+    "4418": {
+        "city": "Paris",
+        "name": "France",
+        "officialName": "France",
+        "area": {
+            "name": "France",
+            "id": 250,
+            "alpha3code": "FRA",
+            "alpha2code": "FR"
+        },
+        "type": "national"
+    },
+    "16521": {
+        "city": "Ar-Riy\\u0101\\u1e0d (Riyadh)",
+        "name": "Saudi Arabia",
+        "officialName": "Saudi Arabia",
+        "area": {
+            "name": "Saudi Arabia",
+            "id": 682,
+            "alpha3code": "SAU",
+            "alpha2code": "SA"
+        },
+        "type": "national"
+    },
+    "1598": {
+        "city": "Las Rozas",
+        "name": "Spain",
+        "officialName": "Spain",
+        "area": {
+            "name": "Spain",
+            "id": 724,
+            "alpha3code": "ESP",
+            "alpha2code": "ES"
+        },
+        "type": "national"
+    },
+    "17322": {
+        "city": "Beograd",
+        "name": "Serbia",
+        "officialName": "Serbia",
+        "area": {
+            "name": "Serbia",
+            "id": 688,
+            "alpha3code": "SRB",
+            "alpha2code": "RS"
+        },
+        "type": "national"
+    },
+    "6697": {
+        "city": "Bern",
+        "name": "Switzerland",
+        "officialName": "Switzerland",
+        "area": {
+            "name": "Switzerland",
+            "id": 756,
+            "alpha3code": "CHE",
+            "alpha2code": "CH"
+        },
+        "type": "national"
+    },
+    "13869": {
+        "city": "Warszawa",
+        "name": "Poland",
+        "officialName": "Poland",
+        "area": {
+            "name": "Poland",
+            "id": 616,
+            "alpha3code": "POL",
+            "alpha2code": "PL"
+        },
+        "type": "national"
+    },
+    "16823": {
+        "city": "Abuja",
+        "name": "Nigeria",
+        "officialName": "Nigeria",
+        "area": {
+            "name": "Nigeria",
+            "id": 566,
+            "alpha3code": "NGA",
+            "alpha2code": "NG"
+        },
+        "type": "national"
+    }
+}

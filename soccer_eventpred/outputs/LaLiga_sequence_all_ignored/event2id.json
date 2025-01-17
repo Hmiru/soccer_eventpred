@@ -1,0 +1,10 @@
+{
+    "[UNK]": 0,
+    "[PAD]": 1,
+    "Pass": 2,
+    "Dribble": 3,
+    "Change of possession": 4,
+    "Cross": 5,
+    "Shot": 6,
+    "Goal": 7
+}
