@@ -12,7 +12,7 @@ local seq2seq_input_dim = time_encoder_dim + team_encoder_dim + event_encoder_di
     "seq2seq_encoder": {
         "type": "pytorch_transformer_encoder",
         "input_size": seq2seq_input_dim,
-        "hidden_size": 128,
+        "feedforward_hidden_dim": 128,
         "num_layers": 4,
     },
     "time_encoder": {
