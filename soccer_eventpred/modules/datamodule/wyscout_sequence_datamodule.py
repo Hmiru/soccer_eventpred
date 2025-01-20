@@ -7,7 +7,6 @@ from soccer_eventpred.data.vocabulary import PAD_TOKEN, UNK_TOKEN, Vocabulary
 from soccer_eventpred.modules.datamodule.soccer_datamodule import SoccerDataModule
 from soccer_eventpred.modules.datamodule.soccer_dataset import SoccerEventDataset
 
-import numpy as np
 
 
 @SoccerDataModule.register("wyscout_sequence")
@@ -88,50 +87,6 @@ class WyScoutSequenceDataModule(SoccerDataModule):
     #     for match in matches:
     #         for event in match.events:
     #             self.vocab.add(event.player_name, "players")
-    def batch_to_numpy(self, batch: Batch):
-        print(f"Batch shape debug:")
-        print(f"event_times: {batch.event_times.shape if batch.event_times is not None else 'None'}")
-        print(f"team_ids: {batch.team_ids.shape if batch.team_ids is not None else 'None'}")
-        print(f"event_ids: {batch.event_ids.shape if batch.event_ids is not None else 'None'}")
-        print(f"player_ids: {batch.player_ids.shape if batch.player_ids is not None else 'None'}")
-        print(f"start_pos_x: {batch.start_pos_x.shape if batch.start_pos_x is not None else 'None'}")
-        print(f"start_pos_y: {batch.start_pos_y.shape if batch.start_pos_y is not None else 'None'}")
-        print(f"end_pos_x: {batch.end_pos_x.shape if batch.end_pos_x is not None else 'None'}")
-        print(f"end_pos_y: {batch.end_pos_y.shape if batch.end_pos_y is not None else 'None'}")
-        features = torch.cat([
-            batch.event_times,
-            batch.team_ids,
-            batch.event_ids,
-            batch.player_ids,
-            batch.start_pos_x,
-            batch.start_pos_y,
-            batch.end_pos_x,
-            batch.end_pos_y,
-        ], dim=1).cpu().numpy()  # 슬라이딩 윈도우 데이터를 numpy로 변환
-        labels = batch.labels.numpy()
-        return features.reshape(features.shape[0], -1), labels
-
-    def get_xgboost_features(self):
-        train_features, train_labels=self._extract_features_labels(self.train_dataloader())
-        valid_features, valid_labels=self._extract_features_labels(self.val_dataloader())
-        test_features, test_labels=self._extract_features_labels(self.test_dataloader())
-        return train_features, train_labels, valid_features, valid_labels, test_features, test_labels
-
-    def _extract_features_labels(self, dataloader):
-        all_features = []
-        all_labels = []
-        
-        for batch in dataloader:
-            # Convert each batch to numpy arrays
-            features, labels = self.batch_to_numpy(batch)
-            all_features.append(features)
-            all_labels.append(labels)
-
-        # Concatenate all batches into single numpy arrays
-        all_features = np.vstack(all_features)
-        all_labels = np.hstack(all_labels)
-        
-        return all_features, all_labels
 
     def build_vocab(self, matches=None):
         if (
@@ -289,6 +244,7 @@ class WyScoutSequenceDataModule(SoccerDataModule):
                 end_pos_x[window_idx, :] = torch.tensor(instance.end_pos_x[start_idx:end_idx], dtype=torch.long)
                 end_pos_y[window_idx, :] = torch.tensor(instance.end_pos_y[start_idx:end_idx], dtype=torch.long)
                 labels[window_idx] = instance.event_ids[end_idx - 1]
+                #event_ids[window_idx, -1] = self.vocab.get(PAD_TOKEN, "events")
 
                 #print(f"Labels[{window_idx}] = {labels[window_idx]}")
 
