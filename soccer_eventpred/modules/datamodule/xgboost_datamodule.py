@@ -7,7 +7,7 @@ from soccer_eventpred.data.dataclass import Batch
 class XGBoostDataModule:
     def __init__(self, datamodule: WyScoutSequenceDataModule):
         self.datamodule = datamodule
-        self.first_batch = True  # 첫 번째 배치 여부 플래그
+        self.first_match = True  # 첫 번째 배치 여부 플래그
 
     def batch_to_numpy(self, batch: Batch):
         print(f"\n[INFO] Converting batch to numpy, batch size: {len(batch.event_times)}")
@@ -38,9 +38,9 @@ class XGBoostDataModule:
         labels = batch.labels.cpu().numpy()
 
         # 첫 번째 배치일 때만 저장
-        if self.first_batch:
+        if self.first_match:
             self._save_to_csv(features, labels, feature_names, "first_batch_features_labels.csv")
-            self.first_batch = False  # 첫 번째 배치 처리 후 플래그 변경
+            self.first_match = False  # 첫 번째 배치 처리 후 플래그 변경
 
         return features.reshape(features.shape[0], -1), labels
 
