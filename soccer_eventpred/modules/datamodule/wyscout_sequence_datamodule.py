@@ -150,8 +150,8 @@ class WyScoutSequenceDataModule(SoccerDataModule):
             player_ids,
             start_pos_x,
             start_pos_y,
-            end_pos_x,
-            end_pos_y,
+            #end_pos_x,
+            #end_pos_y,
         )
 
     def setup(self, stage: str) -> None:
@@ -188,8 +188,8 @@ class WyScoutSequenceDataModule(SoccerDataModule):
             player_ids=batch.player_ids.to(device),
             start_pos_x=batch.start_pos_x.to(device),
             start_pos_y=batch.start_pos_y.to(device),
-            end_pos_x=batch.end_pos_x.to(device),
-            end_pos_y=batch.end_pos_y.to(device),
+            #end_pos_x=batch.end_pos_x.to(device),
+            #end_pos_y=batch.end_pos_y.to(device),
             mask=batch.mask.to(device),
         )
 
@@ -213,8 +213,8 @@ class WyScoutSequenceDataModule(SoccerDataModule):
         player_ids = create_tensor(self.vocab.get(PAD_TOKEN, "players"))
         start_pos_x = create_tensor(DEFAULT_POSITION)
         start_pos_y = create_tensor(DEFAULT_POSITION)
-        end_pos_x = create_tensor(DEFAULT_POSITION)
-        end_pos_y = create_tensor(DEFAULT_POSITION)
+        #end_pos_x = create_tensor(DEFAULT_POSITION)
+        #end_pos_y = create_tensor(DEFAULT_POSITION)
         mask = torch.zeros((total_windows, MAX_LENGTH), dtype=torch.bool)
 
         labels = torch.full((total_windows,), self.vocab.get(PAD_TOKEN, "events"), dtype=torch.long)
@@ -241,10 +241,10 @@ class WyScoutSequenceDataModule(SoccerDataModule):
                 player_ids[window_idx, :] = torch.tensor(instance.player_ids[start_idx:end_idx], dtype=torch.long)
                 start_pos_x[window_idx, :] = torch.tensor(instance.start_pos_x[start_idx:end_idx], dtype=torch.long)
                 start_pos_y[window_idx, :] = torch.tensor(instance.start_pos_y[start_idx:end_idx], dtype=torch.long)
-                end_pos_x[window_idx, :] = torch.tensor(instance.end_pos_x[start_idx:end_idx], dtype=torch.long)
-                end_pos_y[window_idx, :] = torch.tensor(instance.end_pos_y[start_idx:end_idx], dtype=torch.long)
+                #end_pos_x[window_idx, :] = torch.tensor(instance.end_pos_x[start_idx:end_idx], dtype=torch.long)
+                #end_pos_y[window_idx, :] = torch.tensor(instance.end_pos_y[start_idx:end_idx], dtype=torch.long)
                 labels[window_idx] = instance.event_ids[end_idx - 1]
-                #event_ids[window_idx, -1] = self.vocab.get(PAD_TOKEN, "events")
+                event_ids[window_idx, -1] = self.vocab.get(PAD_TOKEN, "events")
 
                 #print(f"Labels[{window_idx}] = {labels[window_idx]}")
 
@@ -272,8 +272,8 @@ class WyScoutSequenceDataModule(SoccerDataModule):
             player_ids=player_ids,
             start_pos_x=start_pos_x,
             start_pos_y=start_pos_y,
-            end_pos_x=end_pos_x,
-            end_pos_y=end_pos_y,
+            #end_pos_x=end_pos_x,
+            #end_pos_y=end_pos_y,
             mask=mask,
             labels=labels,
         )
