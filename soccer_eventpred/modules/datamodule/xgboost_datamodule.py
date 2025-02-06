@@ -10,7 +10,7 @@ class XGBoostDataModule:
         self.first_match = True  # 첫 번째 배치 여부 플래그
 
     def batch_to_numpy(self, batch: Batch):
-        print(f"\n[INFO] Converting batch to numpy, batch size: {len(batch.event_times)}")
+        #print(f"\n[INFO] Converting batch to numpy, batch size: {len(batch.event_times)}")
 
         # 사용될 feature 목록
         feature_names = [
@@ -23,12 +23,12 @@ class XGBoostDataModule:
         ]
 
         # 각 피처별 디버깅
-        def debug_tensor(name, tensor):
-            print(f"\n{name} shape: {tensor.shape}")
-            print(f"{name} (first 5 rows): \n{tensor[:5].cpu().numpy()}")
+        # def debug_tensor(name, tensor):
+        #     print(f"\n{name} shape: {tensor.shape}")
+        #     print(f"{name} (first 5 rows): \n{tensor[:5].cpu().numpy()}")
 
-        for name in feature_names:
-            debug_tensor(name, getattr(batch, name))
+        # for name in feature_names:
+        #     debug_tensor(name, getattr(batch, name))
 
         features = torch.cat(
             [getattr(batch, name) for name in feature_names],
@@ -63,7 +63,7 @@ class XGBoostDataModule:
         all_labels = []
 
         for i, batch in enumerate(dataloader):
-            print(f"\n[INFO] Processing batch {i + 1}...")
+            #print(f"\n[INFO] Processing batch {i + 1}...")
             features, labels = self.batch_to_numpy(batch)
             all_features.append(features)
             all_labels.append(labels)

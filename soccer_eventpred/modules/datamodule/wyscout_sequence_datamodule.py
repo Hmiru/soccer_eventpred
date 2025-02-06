@@ -191,6 +191,7 @@ class WyScoutSequenceDataModule(SoccerDataModule):
             #end_pos_x=batch.end_pos_x.to(device),
             #end_pos_y=batch.end_pos_y.to(device),
             mask=batch.mask.to(device),
+            labels=batch.labels.to(device),
         )
 
     def batch_collator(self, instances: List[Instance]) -> Batch:
@@ -220,7 +221,7 @@ class WyScoutSequenceDataModule(SoccerDataModule):
         labels = torch.full((total_windows,), self.vocab.get(PAD_TOKEN, "events"), dtype=torch.long)
 
         window_idx = 0
-        print(f"Total instances received: {len(instances)}")
+        #print(f"Total instances received: {len(instances)}")
         for instance_idx, instance in enumerate(instances):
             sequence_length = len(instance.event_ids)
             if sequence_length < MAX_LENGTH:
@@ -263,7 +264,7 @@ class WyScoutSequenceDataModule(SoccerDataModule):
         assert event_times.shape[0] == total_windows
         assert labels.shape[0] == total_windows
         assert mask.shape[0] == total_windows
-        # print("Batch created successfully with total windows:", total_windows)
+        print("Batch created successfully with total windows:", total_windows)
 
         return Batch(
             event_times=event_times,

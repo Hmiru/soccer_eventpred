@@ -135,8 +135,8 @@ class WyScoutSequenceEventPredictor(EventPredictor):
                         self._player_encoder(batch.player_ids),
                         self._x_axis_encoder(batch.start_pos_x),
                         self._y_axis_encoder(batch.start_pos_y),
-                        self._x_axis_encoder(batch.end_pos_x),
-                        self._y_axis_encoder(batch.end_pos_y),
+                        #self._x_axis_encoder(batch.end_pos_x),
+                        #self._y_axis_encoder(batch.end_pos_y),
                     ),
                     dim=2, #concatenate along the last dimension; embedding dim
                 ),
@@ -151,8 +151,8 @@ class WyScoutSequenceEventPredictor(EventPredictor):
                         self._event_encoder(event_masked),
                         self._x_axis_encoder(batch.start_pos_x),
                         self._y_axis_encoder(batch.start_pos_y),
-                        self._x_axis_encoder(batch.end_pos_x),
-                        self._y_axis_encoder(batch.end_pos_y),
+                        #self._x_axis_encoder(batch.end_pos_x),
+                        #self._y_axis_encoder(batch.end_pos_y),
                     ),
                     dim=2,#same as above
                 ),
@@ -172,7 +172,9 @@ class WyScoutSequenceEventPredictor(EventPredictor):
         assert output.shape[0] == batch.event_ids.shape[0] # bs
         assert output.shape[1] == self._num_classes        # vocab size
 
-        targets = batch.event_ids[:, -1] #last event as the target, len(targets) = batch_size x 1
+        #targets = batch.event_ids[:, -1] #last event as the target, len(targets) = batch_size x 1
+        targets = batch.labels
+        print(targets)
         loss = self.loss_fn(output,targets) # calculate loss for the last event, bs x 1
         #loss = torch.mean(loss)
 
@@ -192,7 +194,8 @@ class WyScoutSequenceEventPredictor(EventPredictor):
         output = self.forward(batch)
 
         # Correct target for the last event
-        targets = batch.event_ids[:, -1]
+        #targets = batch.event_ids[:, -1]
+        targets = batch.labels
 
         # Use prediction for the last event (40th)
         loss = self.loss_fn(
@@ -217,7 +220,8 @@ class WyScoutSequenceEventPredictor(EventPredictor):
         output = self.forward(batch)
 
         # Correct target for the last event
-        targets = batch.event_ids[:, -1]
+        #targets = batch.event_ids[:, -1]
+        targets=batch.labels
 
         # Use prediction for the last event (40th)
         loss = self.loss_fn(
